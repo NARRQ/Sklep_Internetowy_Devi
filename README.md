@@ -1,1 +1,0 @@
-# Sklep_Internetowy_Devi
