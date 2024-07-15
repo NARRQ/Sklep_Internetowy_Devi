@@ -1,41 +1,11 @@
-<!DOCTYPE html>
-<html lang="pl">
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEVI - Sprzedaż laptopów poleasingowych</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Link do FontAwesome dla ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Document</title>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="devi4.png" alt="DEVI logo">
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#">Laptopy</a></li>
-                    <li><a href="#">Informacje</a></li>
-                    <li><a href="#">Kontakt</a></li>
-                    <li><a href="#" class="cart">
-                        <img src="9025885_shopping_cart_icon.png" alt="Koszyk" class="cart-icon">
-                        Koszyk
-                    </a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Sprzedaż laptopów poleasingowych</h1>
-                <p>Na tej stronie sprawdzisz aktualnie przez nas sprzedawane laptopy i złożysz zamówienie</p>
-                <button><a href="https://www.devisystemsklep.pl">Sprawdź laptopy</a></button>
-            </div>
-        </section>
-    </main>
+<body> -->
     <footer>
         <div class="footer-content">
             <div class="footer-left">
