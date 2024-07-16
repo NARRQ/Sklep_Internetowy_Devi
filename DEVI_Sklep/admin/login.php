@@ -12,7 +12,17 @@
     <!-- NAGLOWEK -->
     <?php include '../header.php';?>
     <main>
-        LOGIN content
+        <div id="login">
+            <h1>
+                LOGOWANIE
+            </h1>
+            <form action="login-script.php" method="post">
+                Login<input type="text" name='login'><br>
+                Haslo<input type="password" name='password'><br>
+                <input type="submit" value="Zaloguj">
+            </form>
+            
+        </div>
     </main>
     <!-- STOPKA -->
     <?php include '../footer.php';?>
