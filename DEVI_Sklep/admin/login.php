@@ -12,16 +12,29 @@
     <!-- NAGLOWEK -->
     <?php include 'header_admin.php';?>
     <main>
-        <div id="login">
-            <h1>
+        <div id="login" class="login-container">
+            <form action="login-script.php" method="post">
+            <!-- <h1>
                 LOGOWANIE
             </h1>
-            <form action="login-script.php" method="post">
                 Login<input type="text" name='login'><br>
                 Haslo<input type="password" name='haslo'><br>
                 <input type="submit" value="Zaloguj">
-            </form>
-            
+            -->
+                <!-- group: Logowanie content -->
+                <h1>Panel administratora - Logowanie</h1>
+                <!-- Pola do wpisania -->
+                <div>
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" name="login" required>
+                </div>
+                <div>
+                    <label for="password">Hasło:</label>
+                    <input type="password" id="haslo" name="haslo" required>
+                </div>
+                <!-- przycisk zaloguj -->
+                <input class="button" type="submit" value="Zaloguj">
+            </form> 
         </div>
     </main>
     <!-- STOPKA -->
