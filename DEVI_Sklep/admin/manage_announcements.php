@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administratora</title>
+    <title>Panel Administratora - Zarządzaj ogłoszeniami</title>
     <link rel="stylesheet" href="../css/style.css">
     <!-- Link do FontAwesome dla ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,16 +13,8 @@
     <?php include 'header_admin.php';?>
     <main>
     <div class="login-container">
-        <h1>Panel Administratora</h1>
-        <div>
-            <button><a href="add_announcement.php">Dodaj ogłoszenie</a></button>
-            <button><a href="manage_announcements.php">Zarządzaj ogłoszeniami</a></button>
-        </div>
-        <br>
-        <div>
-            <button><a href="manage_orders.php">Zarządzaj zamówieniami</a></button>
-            <button><a href="edit_information.php">Edytuj informacje</a></button>
-        </div>
+        <h1>Panel Administratora  - Zarządzaj ogłoszeniami</h1>
+        <button><a href="admin_page.php">Panel Administratora</a></button>
     </div>
     </main>
     <!-- STOPKA -->

@@ -1,4 +1,3 @@
-<!--TODO: DODAĆ OBSŁUGĘ HASHOWANEGO HASŁA -->
 <?php
 include_once('config.php');
 
@@ -28,7 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Verify the user and password
-    if ($user && password_verify($password, $user['haslo'])) {
+    // if ($user && password_verify($password, $user['haslo'])) -- sprawdzenie usera i hasla po hashu
+    if(($user['login'] == $username) && ($user['haslo'] == $password)) 
+    {
         session_start();
         $_SESSION['logged_in'] = $user['id']; // Assumes there's an id field in the admin table
         $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
@@ -40,4 +41,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
