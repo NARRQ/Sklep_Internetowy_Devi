@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,5 +39,18 @@
     </main>
     <!-- STOPKA -->
     <?php include '../footer.php';?>
+    <?php
+        if(isset($_GET['info'])){
+            if($_GET['info']=="empty") {
+                echo "<script language='javascript'>";
+			    echo "alert('Brak danych')";
+			    echo "</script>";
+            };if($_GET['info']=="login_error") {
+                echo "<script language='javascript'>";
+			    echo "alert('Błędne dane logowania')";
+			    echo "</script>";
+            };
+        }
+    ?>
 </body>
 </html>
