@@ -48,7 +48,9 @@ nav ul li a {
 }
 
 main {
-    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    padding: 60px;
 }
 
 .hero {
