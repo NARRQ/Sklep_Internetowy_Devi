@@ -14,14 +14,38 @@
     
     <main>
         <div class="wiersz_kontakt">
-            <div class="kolumna_kontakt kontakt" id="kontakt">
+            <div class="kolumna_kontakt" id="kontakt">
                 <h2>Kontakt</h2>
-                <p>Tu będzie wyświetlany tekst kontaktowy.</p>
                 <?php
-                // Tutaj możesz dodać kod PHP do pobrania i wyświetlenia tekstu kontaktowego z bazy danych
+                // Połączenie z bazą danych
+                include '../baza/config.php';
+                
+                // Pobranie danych z bazy danych
+                $sql = "SELECT informacja_opis, nazwa_firmy, miasto, kod_pocztowy, ulica, numer_telefonu, kod_nip, dni_otwarcia, godziny_otwarcia, email FROM informacje WHERE id_info = 1"; // Możesz dostosować warunek WHERE do swoich potrzeb
+                $result = $mysqli->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // Wyświetlenie danych z bazy danych
+                    while($row = $result->fetch_assoc()) {
+                        echo  "<br><strong>".$row['nazwa_firmy']."</strong>" . "</p>";
+                        echo  $row['ulica'] . "</p>";
+                        echo  $row['kod_pocztowy'] . " ";
+                        echo  $row['miasto'] . "</p><br>";
+                        echo  "<p><strong>E-mail:</strong> ".$row['email']."</p>";
+                        echo "<p><strong>Numer telefonu:</strong> " . $row['numer_telefonu'] . "</p>";
+                        echo "<p><strong>NIP:</strong> " . $row['kod_nip'] . "</p><br>";
+                        echo "<p><strong>Godziny otwarcia:</strong></p>";
+                        echo  $row['dni_otwarcia'] . "</p>";
+                        echo  $row['godziny_otwarcia'] . "</p>";
+                    }
+                } else {
+                    echo "<p>Brak danych do wyświetlenia.</p>";
+                }
+
+                // Zamknięcie połączenia z bazą danych
                 ?>
             </div>
-            <div class="kolumna_kontakt mapa" id="mapa">
+            <div class="kolumna_kontakt" id="mapa">
                 <h2>Nasza lokalizacja</h2>
                 <div style="max-width:100%;overflow:hidden;color:red;width:500px;height:500px;">
                     <div id="my-map-canvas" style="height:100%; width:100%;max-width:100%;">
@@ -36,5 +60,6 @@
     <?php include 'footer_kon.php';?>
 
     <!-- Zamykanie połączenia z bazą danych -->
+    <?php $mysqli->close(); ?>
 </body>
 </html>
