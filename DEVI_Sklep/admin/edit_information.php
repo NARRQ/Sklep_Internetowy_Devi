@@ -12,10 +12,12 @@
     <!-- NAGLOWEK -->
     <?php include 'header_admin.php';?>
     <main>
-    <div class="login-container">
-        <h1>Panel Administratora  - Edycja informacji</h1>
-        <button><a href="admin_page.php">Panel Administratora</a></button>
-    </div>
+        <div class="login-container">
+            <h1>Panel Administratora  - Edycja informacji</h1>
+            <button class="button" type="submit">Zapisz zmiany</button>
+            <button><a href="admin_page.php">Panel Administratora</a></button>
+
+        </div>
     </main>
     <!-- STOPKA -->
     <?php include '../footer.php';?>

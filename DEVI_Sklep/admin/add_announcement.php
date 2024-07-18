@@ -12,7 +12,7 @@
     <!-- NAGLOWEK -->
     <?php include 'header_admin.php';?>
     <main>
-    <div class="login-container">
+    <div class="admin-manage-container">
         <h1>Panel Administratora - Dodaj ogłoszenie</h1>
         <button><a href="admin_page.php">Panel Administratora</a></button>
     </div>
