@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Lip 16, 2024 at 08:17 PM
+-- Generation Time: Lip 17, 2024 at 03:55 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -49,17 +49,18 @@ INSERT INTO `admin` (`id_admina`, `login`, `haslo`) VALUES
 CREATE TABLE `dostawa` (
   `id_dostawy` int(2) UNSIGNED NOT NULL,
   `nazwa` varchar(255) NOT NULL,
-  `cena_dostawy` decimal(10,2) UNSIGNED NOT NULL
+  `cena_dostawy` decimal(10,2) UNSIGNED NOT NULL,
+  `podziekowanie_opis` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `dostawa`
 --
 
-INSERT INTO `dostawa` (`id_dostawy`, `nazwa`, `cena_dostawy`) VALUES
-(1, 'Odbiór osobisty z płatnością przy odbiorze\r\n(ul. ks. J. Popiełuszki 20a/53a 35-328 Rzeszów)', 0.00),
-(2, 'Przesyłka kurierska i przelew na nr konta ', 20.00),
-(3, 'Przesyłka kurierska za pobraniem', 25.00);
+INSERT INTO `dostawa` (`id_dostawy`, `nazwa`, `cena_dostawy`, `podziekowanie_opis`) VALUES
+(1, 'Odbiór osobisty z płatnością przy odbiorze\r\n(ul. ks. J. Popiełuszki 20a/53a 35-328 Rzeszów)', 0.00, 'Potwierdzenie zamówienia i jego szczegóły wyślemy Ci na e-mail.\r\n\r\nProsimy o odebranie zamówienia w sklepie w ciągu <b>48h</b>\r\nPo tym czasie zamówienie zostanie <u>automatycznie anulowane</u>.'),
+(2, 'Przesyłka kurierska i przelew na nr konta ', 20.00, 'Potwierdzenie zamówienia, jego szczegóły i <u>szczegóły do płatności</u> wyślemy Ci na e-mail.\r\n\r\nProsimy o dokonanie płatności w ciągu <b>48h</b>, w innym przypadku zamówienie zostanie <u>anulowane</u>.\r\n\r\n<u>Po dokonaniu płatności</u> przesyłka zostanie wysłana w ciągu najbliższych <b>5 dni roboczych</b>.'),
+(3, 'Przesyłka kurierska za pobraniem', 25.00, 'Potwierdzenie zamówienia i jego szczegóły wyślemy ci na e-mail.\r\n\r\nPrzesyłka zostanie wysłana w ciągu najbliższych <b>5 dni roboczych</b>.');
 
 -- --------------------------------------------------------
 
