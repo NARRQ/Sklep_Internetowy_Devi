@@ -10,7 +10,7 @@
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header.php';?>
+    <?php include 'header_k.php';?>
     <podziekowanie>
         <?php
         // Wczytaj konfigurację bazy danych
@@ -57,7 +57,7 @@
         </div>
     </podziekowanie>
     <!-- STOPKA -->
-    <?php include 'footer.php';?>
+    <?php include 'footer_k.php';?>
 
     <!-- Zamykanie połączenia z bazą danych -->
     <?php $mysqli->close(); ?>
