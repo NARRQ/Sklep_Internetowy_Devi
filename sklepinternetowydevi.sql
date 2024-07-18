@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Lip 18, 2024 at 07:34 PM
+-- Generation Time: Lip 18, 2024 at 10:29 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -78,15 +78,16 @@ CREATE TABLE `informacje` (
   `numer_telefonu` varchar(20) NOT NULL,
   `kod_nip` varchar(50) NOT NULL,
   `dni_otwarcia` varchar(50) NOT NULL,
-  `godziny_otwarcia` varchar(50) NOT NULL
+  `godziny_otwarcia` varchar(50) NOT NULL,
+  `email` varchar(350) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `informacje`
 --
 
-INSERT INTO `informacje` (`id_info`, `informacja_opis`, `nazwa_firmy`, `miasto`, `kod_pocztowy`, `ulica`, `numer_telefonu`, `kod_nip`, `dni_otwarcia`, `godziny_otwarcia`) VALUES
-(1, 'Na tej stronie możesz zobaczyć oferowane przez nas laptopy poleasingowe. \r\n\r\nMasz możliwość zamówić interesujący Cię laptop, aby w przeciągu 48h po złożeniu zamówienia przyjść do naszego sklepu, zapłacić i go odebrać.\r\nMożesz także wybrać przesyłkę kurierską.\r\n\r\n<b>Warunki gwarancji:</b>\r\n\r\nOkres gwarancji: Gwarancja obejmuje okres 2 lat od daty zakupu laptopa.\r\n\r\nZakres gwarancji: Gwarantujemy, że laptop będzie wolny od wad materiałowych i fabrycznych w normalnych warunkach użytkowania.\r\n\r\nSerwis gwarancyjny: W przypadku stwierdzenia wady, klient ma prawo do bezpłatnego naprawy lub wymiany uszkodzonych części przez autoryzowany serwis.\r\n\r\nWyłączenia: Gwarancja nie obejmuje uszkodzeń spowodowanych przez użytkownika, takich jak zalanie, uszkodzenia mechaniczne, uszkodzenia spowodowane nieprawidłowym użytkowaniem lub nieautoryzowaną modyfikacją.\r\n\r\nProcedura gwarancyjna:\r\n\r\nW celu skorzystania z gwarancji, klient powinien przedstawić dowód zakupu.\r\nLaptop musi być zwrócony w oryginalnym opakowaniu lub zapewnionym odpowiednim pakowaniu.\r\nKlient jest odpowiedzialny za koszty transportu w przypadku wysyłki laptopa do serwisu.\r\nOgraniczenia:\r\n\r\nGwarancja nie obejmuje oprogramowania, które nie jest częścią oryginalnej konfiguracji laptopa.\r\nGwarancja nie obejmuje kosztów związanych z utratą danych ani usunięciem danych z laptopa.\r\nInne postanowienia:\r\n\r\nGwarancja jest ważna tylko w kraju zakupu.\r\nGwarancja jest przenoszalna w przypadku sprzedaży laptopa, pod warunkiem zachowania oryginalnego dowodu zakupu.', 'Devi System', 'Rzeszów', '35-328', 'ks.Jerzego Popiełuszki', '669958485', '6861586654', 'pon - pt', '9.00 - 16.00');
+INSERT INTO `informacje` (`id_info`, `informacja_opis`, `nazwa_firmy`, `miasto`, `kod_pocztowy`, `ulica`, `numer_telefonu`, `kod_nip`, `dni_otwarcia`, `godziny_otwarcia`, `email`) VALUES
+(1, 'Na tej stronie możesz zobaczyć oferowane przez nas laptopy poleasingowe. \r\n\r\nMasz możliwość zamówić interesujący Cię laptop, aby w przeciągu 48h po złożeniu zamówienia przyjść do naszego sklepu, zapłacić i go odebrać.\r\nMożesz także wybrać przesyłkę kurierską.\r\n\r\n<b>Warunki gwarancji:</b>\r\n\r\nOkres gwarancji: Gwarancja obejmuje okres 2 lat od daty zakupu laptopa.\r\n\r\nZakres gwarancji: Gwarantujemy, że laptop będzie wolny od wad materiałowych i fabrycznych w normalnych warunkach użytkowania.\r\n\r\nSerwis gwarancyjny: W przypadku stwierdzenia wady, klient ma prawo do bezpłatnego naprawy lub wymiany uszkodzonych części przez autoryzowany serwis.\r\n\r\nWyłączenia: Gwarancja nie obejmuje uszkodzeń spowodowanych przez użytkownika, takich jak zalanie, uszkodzenia mechaniczne, uszkodzenia spowodowane nieprawidłowym użytkowaniem lub nieautoryzowaną modyfikacją.\r\n\r\nProcedura gwarancyjna:\r\n\r\nW celu skorzystania z gwarancji, klient powinien przedstawić dowód zakupu.\r\nLaptop musi być zwrócony w oryginalnym opakowaniu lub zapewnionym odpowiednim pakowaniu.\r\nKlient jest odpowiedzialny za koszty transportu w przypadku wysyłki laptopa do serwisu.\r\nOgraniczenia:\r\n\r\nGwarancja nie obejmuje oprogramowania, które nie jest częścią oryginalnej konfiguracji laptopa.\r\nGwarancja nie obejmuje kosztów związanych z utratą danych ani usunięciem danych z laptopa.\r\nInne postanowienia:\r\n\r\nGwarancja jest ważna tylko w kraju zakupu.\r\nGwarancja jest przenoszalna w przypadku sprzedaży laptopa, pod warunkiem zachowania oryginalnego dowodu zakupu.', 'Devi System', 'Rzeszów', '35-328', 'ks. Jerzego Popiełuszki', '669958485', '6861586654', 'pon - pt', '9.00 - 16.00', 'devikontakt@gmail.com');
 
 -- --------------------------------------------------------
 
