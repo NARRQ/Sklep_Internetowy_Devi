@@ -79,7 +79,7 @@
         }
         form textarea {
             resize: vertical;
-            height: 100px;
+            height: 500px;
         }
         .image-preview-container {
             display: flex;
@@ -102,6 +102,51 @@
     <!-- LOGIKA POLACZENIA -->
     <?php
         require('../baza/config.php');
+        //update rekordu
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $informacja_opis = htmlentities($_POST['description']);
+            $nazwa_firmy = htmlentities($_POST['name']);
+            $miasto = htmlentities($_POST['city']);
+            $kod_pocztowy = htmlentities($_POST['post_code']);
+            $ulica = htmlentities($_POST['street']);
+            $numer_telefonu = htmlentities($_POST['phone']);
+            $kod_nip = htmlentities($_POST['NIP']);
+            $dni_otwarcia = htmlentities($_POST['open_days']);
+            $godziny_otwarcia = htmlentities($_POST['open_hours']);
+            $email = htmlentities($_POST['email']);
+            
+            $informacja_opis = mysqli_real_escape_string($conn, $informacja_opis);
+            $nazwa_firmy = mysqli_real_escape_string($conn, $nazwa_firmy);
+            $miasto = mysqli_real_escape_string($conn, $miasto);
+            $kod_pocztowy = mysqli_real_escape_string($conn, $kod_pocztowy);
+            $ulica = mysqli_real_escape_string($conn, $ulica);
+            $numer_telefonu = mysqli_real_escape_string($conn, $numer_telefonu);
+            $kod_nip = mysqli_real_escape_string($conn, $kod_nip);
+            $dni_otwarcia = mysqli_real_escape_string($conn, $dni_otwarcia);
+            $godziny_otwarcia = mysqli_real_escape_string($conn, $godziny_otwarcia);
+            $email = mysqli_real_escape_string($conn, $email);
+        
+            $query = "UPDATE informacje SET 
+                        informacja_opis='$informacja_opis', 
+                        nazwa_firmy='$nazwa_firmy', 
+                        miasto='$miasto', 
+                        kod_pocztowy='$kod_pocztowy', 
+                        ulica='$ulica', 
+                        numer_telefonu='$numer_telefonu', 
+                        kod_nip='$kod_nip', 
+                        dni_otwarcia='$dni_otwarcia', 
+                        godziny_otwarcia='$godziny_otwarcia', 
+                        email='$email' 
+                      WHERE id_info=1";
+        
+            if (mysqli_query($conn, $query)) {
+                echo '<div class="message">Informacje zostały zaktualizowane pomyślnie.</div>';
+            } else {
+                echo '<div class="message">Błąd aktualizacji informacji: ' . mysqli_error($conn) . '</div>';
+            }
+        }
+        //wyswietlenie do edycji
         $query = "SELECT * FROM informacje where id_info=1";
 	
         $result = mysqli_query($conn,$query);
@@ -114,47 +159,47 @@
             <h1>Panel Administratora - Edycja informacji</h1>
             <button><a href="admin_page.php">Panel Administratora</a></button>
              <!-- FORMULARZ -->
-             <form action="update_info.php" method="post">
-                <div>
-                    <label for="description">Informacje:</label>
-                    <textarea name="description" id="description" required><?php echo isset($row['informacja_opis']) ? htmlspecialchars($row['informacja_opis']) : ''; ?></textarea>
-                </div>
-                <div>
-                    <label for="name">Nazwa:</label>
-                    <input type="text" id="name" name="name" value="<?php echo isset($row['nazwa_firmy']) ? htmlspecialchars($row['nazwa_firmy']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="city">Miasto:</label>
-                    <input type="text" id="city" name="city" value="<?php echo isset($row['miasto']) ? htmlspecialchars($row['miasto']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="post_code">Kod Pocztowy:</label>
-                    <input type="text" id="post_code" name="post_code" value="<?php echo isset($row['kod_pocztowy']) ? htmlspecialchars($row['kod_pocztowy']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="street">Ulica:</label>
-                    <input type="text" id="street" name="street" value="<?php echo isset($row['ulica']) ? htmlspecialchars($row['ulica']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="phone">Numer telefonu:</label>
-                    <input type="text" id="phone" name="phone" value="<?php echo isset($row['numer_telefonu']) ? htmlspecialchars($row['numer_telefonu']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="NIP">Kod NIP:</label>
-                    <input type="text" id="NIP" name="NIP" value="<?php echo isset($row['kod_nip']) ? htmlspecialchars($row['kod_nip']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="open_days">Dni Otwarcia:</label>
-                    <input type="text" id="open_days" name="open_days" value="<?php echo isset($row['dni_otwarcia']) ? htmlspecialchars($row['dni_otwarcia']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="open_hours">Godziny Otwarcia:</label>
-                    <input type="text" id="open_hours" name="open_hours" value="<?php echo isset($row['godziny_otwarcia']) ? htmlspecialchars($row['godziny_otwarcia']) : ''; ?>" required>
-                </div>
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="text" id="email" name="email" value="<?php echo isset($row['email']) ? htmlspecialchars($row['email']) : ''; ?>" required>
-                </div>
+             <form name="edit_info" method="post">
+                 <div>
+                     <label for="name">Nazwa:</label>
+                     <input type="text" id="name" name="name" value="<?php echo isset($row['nazwa_firmy']) ? htmlspecialchars($row['nazwa_firmy']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="city">Miasto:</label>
+                        <input type="text" id="city" name="city" value="<?php echo isset($row['miasto']) ? htmlspecialchars($row['miasto']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="post_code">Kod Pocztowy:</label>
+                        <input type="text" id="post_code" name="post_code" value="<?php echo isset($row['kod_pocztowy']) ? htmlspecialchars($row['kod_pocztowy']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="street">Ulica:</label>
+                        <input type="text" id="street" name="street" value="<?php echo isset($row['ulica']) ? htmlspecialchars($row['ulica']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="phone">Numer telefonu:</label>
+                        <input type="text" id="phone" name="phone" value="<?php echo isset($row['numer_telefonu']) ? htmlspecialchars($row['numer_telefonu']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="NIP">Kod NIP:</label>
+                        <input type="text" id="NIP" name="NIP" value="<?php echo isset($row['kod_nip']) ? htmlspecialchars($row['kod_nip']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="open_days">Dni Otwarcia:</label>
+                        <input type="text" id="open_days" name="open_days" value="<?php echo isset($row['dni_otwarcia']) ? htmlspecialchars($row['dni_otwarcia']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="open_hours">Godziny Otwarcia:</label>
+                        <input type="text" id="open_hours" name="open_hours" value="<?php echo isset($row['godziny_otwarcia']) ? htmlspecialchars($row['godziny_otwarcia']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" value="<?php echo isset($row['email']) ? htmlspecialchars($row['email']) : ''; ?>" required>
+                    </div>
+                    <div>
+                        <label for="description">Informacje:</label>
+                        <textarea name="description" id="description" required><?php echo isset($row['informacja_opis']) ? htmlspecialchars($row['informacja_opis']) : ''; ?></textarea>
+                    </div>
                 <button type="submit">Zapisz zmiany</button>
             </form>
         </div>
