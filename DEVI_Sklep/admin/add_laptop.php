@@ -74,7 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 10;
-	    padding: 0;
+	        padding: 0;
+        }
+        main {
+            padding: 100px;
         }
         .edit-container {
             width: 100%;
@@ -82,8 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            align-self: center;
+	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	        align-self: center;
             text-align: center;
         }
         h1 {

@@ -4,30 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administratora - Edycja informacji</title>
-    <link rel="stylesheet"  media="all" href="../css/style.css" type="text/css">
-    <!-- Link do FontAwesome dla ikon -->
+    <link rel="stylesheet" media="all" href="../css/style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- <style>
-        .edtit-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            /* width: 30%; */
-            /* position: relative; */
-            /* left: 43%; */
-            /* transform: translate(-50%, -50%); */
-            text-align: center;
-            margin: 100px;
-        }
-    </style> -->
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 10;
 	        padding: 0;
+        }
+        main {
+            padding: 100px;
         }
         .edit-container {
             width: 100%;
@@ -37,6 +24,7 @@
             border-radius: 8px;
 	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	        align-self: center;
+            text-align: center;
         }
         h1 {
             margin-top: 0;
@@ -111,54 +99,64 @@
     <!-- NAGLOWEK -->
     <?php include 'header_admin.php';?>
     <main>
-        <div class="edtit-container">
-            <h1>Panel Administratora  - Edycja informacji</h1>
+    <!-- LOGIKA POLACZENIA -->
+    <?php
+        require('../baza/config.php');
+        $query = "SELECT * FROM informacje where id_info=1";
+	
+        $result = mysqli_query($conn,$query);
+        
+        if($result){
+            $row=mysqli_fetch_assoc($result);
+        }
+    ?>
+        <div class="edit-container">
+            <h1>Panel Administratora - Edycja informacji</h1>
+            <button><a href="admin_page.php">Panel Administratora</a></button>
              <!-- FORMULARZ -->
-             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+             <form action="update_info.php" method="post">
                 <div>
-                    <label for="description">informacje:</label>
-                    <textarea name="description" id="description" required></textarea>
+                    <label for="description">Informacje:</label>
+                    <textarea name="description" id="description" required><?php echo isset($row['informacja_opis']) ? htmlspecialchars($row['informacja_opis']) : ''; ?></textarea>
                 </div>
                 <div>
                     <label for="name">Nazwa:</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" value="<?php echo isset($row['nazwa_firmy']) ? htmlspecialchars($row['nazwa_firmy']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="processor">Miasto:</label>
-                    <input type="text" id="processor" name="processor" required>
+                    <label for="city">Miasto:</label>
+                    <input type="text" id="city" name="city" value="<?php echo isset($row['miasto']) ? htmlspecialchars($row['miasto']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="processor_size">Kod Pocztowy:</label>
-                    <input type="text" id="processor_size" name="processor_size" required>
+                    <label for="post_code">Kod Pocztowy:</label>
+                    <input type="text" id="post_code" name="post_code" value="<?php echo isset($row['kod_pocztowy']) ? htmlspecialchars($row['kod_pocztowy']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="ram">Ulica:</label>
-                    <input type="text" id="ram" name="ram" required>
+                    <label for="street">Ulica:</label>
+                    <input type="text" id="street" name="street" value="<?php echo isset($row['ulica']) ? htmlspecialchars($row['ulica']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="graphics">Numer telefonu:</label>
-                    <input type="text" id="graphics" name="graphics" required>
+                    <label for="phone">Numer telefonu:</label>
+                    <input type="text" id="phone" name="phone" value="<?php echo isset($row['numer_telefonu']) ? htmlspecialchars($row['numer_telefonu']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="disk">Kod NIP:</label>
-                    <input type="text" id="disk" name="disk" required>
+                    <label for="NIP">Kod NIP:</label>
+                    <input type="text" id="NIP" name="NIP" value="<?php echo isset($row['kod_nip']) ? htmlspecialchars($row['kod_nip']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="keyboard">Dni Otwarcia:</label>
-                    <input type="text" id="keyboard" name="keyboard" required>
+                    <label for="open_days">Dni Otwarcia:</label>
+                    <input type="text" id="open_days" name="open_days" value="<?php echo isset($row['dni_otwarcia']) ? htmlspecialchars($row['dni_otwarcia']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="screen_size">Godziny Otwarcia:</label>
-                    <input type="text" id="screen_size" name="screen_size" required>
+                    <label for="open_hours">Godziny Otwarcia:</label>
+                    <input type="text" id="open_hours" name="open_hours" value="<?php echo isset($row['godziny_otwarcia']) ? htmlspecialchars($row['godziny_otwarcia']) : ''; ?>" required>
                 </div>
                 <div>
-                    <label for="resolution">Email:</label>
-                    <input type="text" id="resolution" name="resolution" required>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" value="<?php echo isset($row['email']) ? htmlspecialchars($row['email']) : ''; ?>" required>
                 </div>
+                <button type="submit">Zapisz zmiany</button>
             </form>
-            <button class="button" type="submit">Zapisz zmiany</button>
-            <button><a href="admin_page.php">Panel Administratora</a></button>
-
         </div>
     </main>
     <!-- STOPKA -->
