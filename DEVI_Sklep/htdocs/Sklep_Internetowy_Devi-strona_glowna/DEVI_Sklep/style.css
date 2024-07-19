@@ -10,6 +10,7 @@ body {
     background-color: #f7f7f7;
     color: #333;
 }
+
 .container {
     display: flex;
     justify-content: space-between;
@@ -52,7 +53,7 @@ main {
 }
 
 .hero {
-    background: url('../img/devi_tloo.jpg') no-repeat center center/cover;
+    background: url('devi_tloo.jpg') no-repeat center center/cover;
     color: #fff;
     padding: 100px 20px;
     text-align: center;
@@ -84,7 +85,7 @@ main {
     margin-bottom: 20px;
 }
 
-button {
+.hero button {
     background-color: #333;
     color: #fff;
     border: none;
@@ -94,12 +95,12 @@ button {
     text-decoration: none;
 }
 
-button a {
+.hero button a {
     color: #fff;
     text-decoration: none;
 }
 
-button:hover {
+.hero button:hover {
     background-color: #444;
 }
 
@@ -108,8 +109,6 @@ footer {
     color: #fff;
     padding: 20px;
     position: relative;
-    bottom: 0;
-    width: 100%;
     font-size: 0.870em;
 }
 
@@ -172,55 +171,4 @@ footer {
 footer a {
     color: #fff;
     text-decoration: none;
-}
-
-.login-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    /* width: 30%; */
-    position: relative;
-    left: 43%;
-    transform: translate(-50%, -50%);
-    margin: 100px;
-    align-self: center;
-
-}
-
-.edtit-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    margin-bottom: 20px;
-    font-size: 1.5em;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
-    text-align: left;
-    margin-bottom: 5px;
-}
-
-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-}
-
-podziekowanie {
-    font-size: 30px;
-    text-align: center;
-    padding: 60px;
 }
