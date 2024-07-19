@@ -73,18 +73,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 10;
+            margin: 0;
             padding: 0;
         }
-        .login-container {
-            width: 90%;
-            max-width: 900px;
-            margin: 10 auto;
-            background: #fff;
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100; /* nagłówek jest na wierzchu */
+            
+        }
+        main {
+            padding: 50px;
+            margin-top: 95% ; /* Margines u góry dla przestrzeni pod nagłówkiem */
+            
+            
+        }
+
+        .login-containerr {
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 0; /* Zmniejszono marginesy górne i dolne */
+            width: 90%; /* Ustawienie szerokości na 90% */
+            max-width: 900px; /* Maksymalna szerokość kontenera */
         }
+
         h1 {
             margin-top: 0;
         }
@@ -118,6 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         form {
             display: flex;
             flex-direction: column;
+            
+            
         }
         form div {
             margin-bottom: 15px;

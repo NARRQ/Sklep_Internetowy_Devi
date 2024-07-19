@@ -19,10 +19,8 @@
             margin: 0 auto;
             padding: 20px;
             display: grid;
-            grid-gap: 10px; /* Odstęp między ogłoszeniami */
-            grid-template-columns: repeat(3, 1fr); /* 3 kolumny */
-            grid-template-rows: repeat(2, auto); /* 2 wiersze, automatyczna wysokość */
-           
+            grid-gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         }
 
         .announcement {
@@ -33,14 +31,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease;
             cursor: pointer;
-            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px; 
-            margin: 10px; 
-            max-width: 300px; 
-            
+            padding: 10px;
+            max-width: 300px;
+            height: 450px;
         }
 
         .announcement:hover {
@@ -48,16 +44,18 @@
         }
 
         .announcement img {
-            width: 80%;
-            height: auto;
-            display: block;
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
             border-radius: 8px 8px 0 0;
         }
 
         .announcement .summary {
             padding: 20px;
             box-sizing: border-box;
+            justify-content: space-between;
             text-align: center;
+            flex-grow: 1;
         }
 
         .announcement .summary p {
@@ -85,14 +83,13 @@
             width: 80%;
             max-width: 1000px;
             position: relative;
-            text-align: center;
             box-sizing: border-box;
         }
 
         .modal-content img {
             width: 100%;
-            height: 500px; /* Stała wysokość */
-            object-fit: contain; /* Dopasowanie obrazu */
+            height: 400px;
+            object-fit: contain;
             display: block;
             margin: 0 auto;
         }
@@ -102,17 +99,17 @@
             cursor: pointer;
             color: #333;
             position: absolute;
-            top: 30%;
+            top: 20%;
             transform: translateY(-50%);
             user-select: none;
         }
 
         .modal .prev {
-            left: 10px; /* Przesunięcie w lewo od krawędzi */
+            left: 10px;
         }
 
         .modal .next {
-            right: 10px; /* Przesunięcie w prawo od krawędzi */
+            right: 10px;
         }
 
         .modal .close {
@@ -129,18 +126,98 @@
             cursor: pointer;
         }
 
-        .details {
+        .modal-content .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-content .header h2 {
+            margin: 20px 0;
+            font-size: 24px;
             text-align: center;
+        }
+
+        .modal-content .header .mini-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .header .mini-info .info-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            flex: 1 1 45%;
+            margin: 10px;
+            margin-right: 500px;
+        }
+
+        .modal-content .header .mini-info .info-box p {
+            margin: 5px 0;
+        }
+
+        .modal-content .header .mini-info .price-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-left: auto;
+            text-align: right;
+            margin-top: -180px;
+        }
+
+        .modal-content .header .mini-info .price-container p {
+            margin: 5px 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .modal-content .add-to-cart {
+            margin-top: -60px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .modal-content .add-to-cart label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-content .add-to-cart input {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content .add-to-cart button {
+            background-color: #ffffff;
+            color: #28a745;
+            border: 2px solid #28a745;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .modal-content .add-to-cart button:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .modal-content .details {
             margin-top: 20px;
         }
 
-        .details h2 {
-            margin-top: 0;
-            font-size: 24px;
-        }
-
-        .details .specification,
-        .details .description {
+        .modal-content .details .specification,
+        .modal-content .details .description {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
@@ -148,8 +225,8 @@
             background-color: #f9f9f9;
         }
 
-        .details .specification h3,
-        .details .description h3 {
+        .modal-content .details .specification h3,
+        .modal-content .details .description h3 {
             margin-top: 0;
             font-size: 20px;
             text-align: center;
@@ -164,31 +241,8 @@
 
         .specification p strong {
             display: table-cell;
-            width: 200px; /* Szerokość kolumny z etykietą */
-            padding-right: 10px; /* Odstęp między kolumnami */
-        }
-
-        .delete-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .delete-btn:hover {
-            background-color: #c82333;
-        }
-
-        .message {
-            background-color: #28a745;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-            margin-bottom: 20px;
+            width: 200px;
+            padding-right: 10px;
         }
     </style>
 </head>
@@ -203,8 +257,32 @@
             <span class="arrow prev">&#10094;</span>
             <img id="modal-image" src="" alt="Zdjęcie produktu">
             <span class="arrow next">&#10095;</span>
-            <div class="details" id="modal-details">
-                <!-- Szczegóły i opis -->
+            <div class="header">
+                <h2 id="modal-title"></h2>
+                <div class="mini-info">
+                    <div class="info-box">
+                        <p><strong>Procesor:</strong> <span id="modal-processor"></span></p>
+                        <p><strong>Pamięć RAM:</strong> <span id="modal-ram"></span></p>
+                        <p><strong>Grafika:</strong> <span id="modal-graphics"></span></p>
+                    </div>
+                    <div class="price-container">
+                        <p><strong>Cena:</strong> <span id="modal-price"></span> zł</p>
+                    </div>
+                </div>
+            </div>
+            <div class="add-to-cart">
+                <label for="modal-quantity">Ilość:</label>
+                <input type="number" id="modal-quantity" min="1" value="1">
+                <p id="modal-stock"></p>
+                <button id="modal-add-to-cart"><i class="fas fa-shopping-cart"></i> Dodaj do koszyka</button>
+            </div>
+            <div class="details">
+                <div class="specification" id="modal-specification">
+                    <h3>Specyfikacja</h3>
+                </div>
+                <div class="description" id="modal-description">
+                    <h3>Opis</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -228,7 +306,7 @@
                         <p><strong>Procesor:</strong> <?php echo $announcement['procesor']; ?></p>
                         <p><strong>Pamięć RAM:</strong> <?php echo $announcement['ram']; ?></p>
                         <p><strong>Grafika:</strong> <?php echo $announcement['grafika']; ?></p>
-                        <button class="delete-btn" data-index="<?php echo $index; ?>">Usuń</button>
+                        <!-- Przyciski usunięcia zostały usunięte -->
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -242,8 +320,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById("announcementModal");
             const modalImg = document.getElementById("modal-image");
-            const modalDetails = document.getElementById("modal-details");
+            const modalTitle = document.getElementById("modal-title");
+            const modalPrice = document.getElementById("modal-price");
+            const modalProcessor = document.getElementById("modal-processor");
+            const modalRam = document.getElementById("modal-ram");
+            const modalGraphics = document.getElementById("modal-graphics");
+            const modalQuantity = document.getElementById("modal-quantity");
+            const modalStock = document.getElementById("modal-stock");
+            const addToCartBtn = document.getElementById("modal-add-to-cart");
             const closeModal = document.querySelector(".close");
+            const modalSpecification = document.getElementById("modal-specification");
+            const modalDescription = document.getElementById("modal-description");
+            const prevArrow = document.querySelector('.arrow.prev');
+            const nextArrow = document.querySelector('.arrow.next');
+
             let currentIndex = 0;
             let currentAnnouncement = null;
             const announcements = <?php echo json_encode($announcements); ?>;
@@ -252,71 +342,39 @@
                 currentIndex = index;
                 currentAnnouncement = announcements[index];
                 modalImg.src = currentAnnouncement['zdjecia'][0];
-                modalDetails.innerHTML = `
-                    <h2>${currentAnnouncement['nazwa']}</h2>
-                    <div class="specification">
-                        <h3>Specyfikacja</h3>
-                        <p><strong>Producent:</strong> ${currentAnnouncement['producent']}</p>
-                        <p><strong>Cena:</strong> ${currentAnnouncement['cena']} zł</p>
-                        <p><strong>Procesor:</strong> ${currentAnnouncement['procesor']}</p>
-                        <p><strong>Pamięć RAM:</strong> ${currentAnnouncement['ram']}</p>
-                        <p><strong>Grafika:</strong> ${currentAnnouncement['grafika']}</p>
-                        <p><strong>Procesor szczegóły:</strong> ${currentAnnouncement['procesor_sz']}</p>
-                        <p><strong>Dysk:</strong> ${currentAnnouncement['dysk']}</p>
-                        <p><strong>Układ klawiatury:</strong> ${currentAnnouncement['klawiatura']}</p>
-                        <p><strong>Przekątna ekranu:</strong> ${currentAnnouncement['przekatna']}</p>
-                        <p><strong>Rozdzielczość:</strong> ${currentAnnouncement['rozdzielczosc']}</p>
-                        <p><strong>Typ matrycy:</strong> ${currentAnnouncement['matryca']}</p>
-                        <p><strong>System operacyjny:</strong> ${currentAnnouncement['system']}</p>
-                        <p><strong>Porty:</strong> ${currentAnnouncement['porty']}</p>
-                        <p><strong>Komunikacja:</strong> ${currentAnnouncement['komunikacja']}</p>
-                        <p><strong>Multimedia:</strong> ${currentAnnouncement['multimedia']}</p>
-                        <p><strong>Stan wizualny:</strong> ${currentAnnouncement['stan']}</p>
-                        <p><strong>Średni czas pracy na baterii:</strong> ${currentAnnouncement['czas_pracy']}</p>
-                        <p><strong>Zasilacz:</strong> ${currentAnnouncement['zasilacz']}</p>
-                    </div>
-                    <div class="description">
-                        <h3>Opis</h3>
-                        <p>${currentAnnouncement['opis']}</p>
-                    </div>
+                modalTitle.textContent = currentAnnouncement['nazwa'];
+                modalPrice.textContent = currentAnnouncement['cena'];
+                modalProcessor.textContent = currentAnnouncement['procesor'];
+                modalRam.textContent = currentAnnouncement['ram'];
+                modalGraphics.textContent = currentAnnouncement['grafika'];
+                modalStock.textContent = `Dostępność: ${currentAnnouncement['ilosc']} sztuk`;
+                modalSpecification.innerHTML = `
+                    <h3>Specyfikacja</h3>
+                    <p><strong>Producent:</strong> ${currentAnnouncement['producent']}</p>
+                    <p><strong>Procesor szczegóły:</strong> ${currentAnnouncement['procesor_sz']}</p>
+                    <p><strong>Dysk:</strong> ${currentAnnouncement['dysk']}</p>
+                    <p><strong>Układ klawiatury:</strong> ${currentAnnouncement['klawiatura']}</p>
+                    <p><strong>Przekątna ekranu:</strong> ${currentAnnouncement['przekatna']}</p>
+                    <p><strong>Rozdzielczość:</strong> ${currentAnnouncement['rozdzielczosc']}</p>
+                    <p><strong>Typ matrycy:</strong> ${currentAnnouncement['matryca']}</p>
+                    <p><strong>System operacyjny:</strong> ${currentAnnouncement['system']}</p>
+                    <p><strong>Porty:</strong> ${currentAnnouncement['porty']}</p>
+                    <p><strong>Komunikacja:</strong> ${currentAnnouncement['komunikacja']}</p>
+                    <p><strong>Multimedia:</strong> ${currentAnnouncement['multimedia']}</p>
+                    <p><strong>Stan wizualny:</strong> ${currentAnnouncement['stan']}</p>
+                    <p><strong>Średni czas pracy na baterii:</strong> ${currentAnnouncement['czas_pracy']}</p>
+                    <p><strong>Zasilacz:</strong> ${currentAnnouncement['zasilacz']}</p>
+                `;
+                modalDescription.innerHTML = `
+                    <h3>Opis</h3>
+                    <p>${currentAnnouncement['opis']}</p>
                 `;
                 modal.style.display = "block";
             };
 
-            document.querySelectorAll('.announcement').forEach(announcement => {
-                announcement.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('delete-btn')) {
-                        const index = e.target.getAttribute('data-index');
-                        if (confirm('Czy na pewno chcesz usunąć to ogłoszenie?')) {
-                            // Usuwanie ogłoszenia
-                            fetch('delete_announcement.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded'
-                                },
-                                body: new URLSearchParams({
-                                    index: index
-                                })
-                            }).then(response => response.json())
-                              .then(data => {
-                                  if (data.success) {
-                                      document.querySelector(`.announcement[data-index='${index}']`).remove();
-                                      alert('Ogłoszenie zostało usunięte.');
-                                  } else {
-                                      alert('Wystąpił błąd podczas usuwania ogłoszenia.');
-                                  }
-                              });
-                        }
-                    } else {
-                        const index = announcement.getAttribute('data-index');
-                        openModal(index);
-                    }
-                });
-            });
-
-            closeModal.addEventListener('click', () => {
+            const closeModalFunction = () => {
                 modal.style.display = "none";
-            });
+            };
 
             const showImage = (index) => {
                 if (index >= 0 && index < currentAnnouncement['zdjecia'].length) {
@@ -324,23 +382,28 @@
                 }
             };
 
-            document.querySelector('.next').addEventListener('click', () => {
-                if (currentIndex + 1 < currentAnnouncement['zdjecia'].length) {
-                    currentIndex++;
-                    showImage(currentIndex);
-                }
+            prevArrow.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + currentAnnouncement['zdjecia'].length) % currentAnnouncement['zdjecia'].length;
+                showImage(currentIndex);
             });
 
-            document.querySelector('.prev').addEventListener('click', () => {
-                if (currentIndex - 1 >= 0) {
-                    currentIndex--;
-                    showImage(currentIndex);
-                }
+            nextArrow.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % currentAnnouncement['zdjecia'].length;
+                showImage(currentIndex);
             });
+
+            document.querySelectorAll('.announcement').forEach(announcement => {
+                announcement.addEventListener('click', () => {
+                    const index = announcement.getAttribute('data-index');
+                    openModal(index);
+                });
+            });
+
+            closeModal.addEventListener('click', closeModalFunction);
 
             window.addEventListener('click', (event) => {
                 if (event.target === modal) {
-                    modal.style.display = "none";
+                    closeModalFunction();
                 }
             });
         });
