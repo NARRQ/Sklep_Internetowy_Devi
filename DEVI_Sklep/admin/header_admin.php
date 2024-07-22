@@ -8,8 +8,10 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo">
-                <img src="../img/devi4.png" alt="DEVI logo">
+        <div class="logo">
+                <a href="../index.php">
+                    <img src="../img/devi4.png" alt="DEVI logo">
+                </a>
             </div>
             <nav>
                 <ul>
