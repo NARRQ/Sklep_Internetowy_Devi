@@ -10,7 +10,7 @@
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header_kon.php';?>
+    <?php include 'header_kon.php'; ?>
     
     <main>
         <div class="wiersz_kontakt">
@@ -22,11 +22,11 @@
                 
                 // Pobranie danych z bazy danych
                 $sql = "SELECT informacja_opis, nazwa_firmy, miasto, kod_pocztowy, ulica, numer_telefonu, kod_nip, dni_otwarcia, godziny_otwarcia, email FROM informacje WHERE id_info = 1"; // Możesz dostosować warunek WHERE do swoich potrzeb
-                $result = $mysqli->query($sql);
+                $result = mysqli_query($conn, $sql);
 
-                if ($result->num_rows > 0) {
+                if ($result && mysqli_num_rows($result) > 0) {
                     // Wyświetlenie danych z bazy danych
-                    while($row = $result->fetch_assoc()) {
+                    while($row = mysqli_fetch_assoc($result)) {
                         echo  "<br><strong>".$row['nazwa_firmy']."</strong>" . "</p>";
                         echo  $row['ulica'] . "</p>";
                         echo  $row['kod_pocztowy'] . " ";
@@ -49,17 +49,16 @@
                 <h2>Nasza lokalizacja</h2>
                 <div style="max-width:100%;overflow:hidden;color:red;width:500px;height:500px;">
                     <div id="my-map-canvas" style="height:100%; width:100%;max-width:100%;">
-                        <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=DEVI+SYSTEM+Księdza+Jerzego+Popiełuszki+20A/53A,+35-328+Rzeszów&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8">
-                        </iframe>
+                        <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=DEVI+SYSTEM+Księdza+Jerzego+Popiełuszki+20A/53A,+35-328+Rzeszów&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </main>
     <!-- STOPKA -->
-    <?php include 'footer_kon.php';?>
+    <?php include 'footer_kon.php'; ?>
 
     <!-- Zamykanie połączenia z bazą danych -->
-    <?php $mysqli->close(); ?>
+    <?php mysqli_close($conn); ?>
 </body>
 </html>

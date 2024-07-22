@@ -10,37 +10,37 @@
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header_i.php';?>
+    <?php include 'header_i.php'; ?>
+
     <informacje>
         <?php
         // Wczytaj konfigurację bazy danych
         include '../baza/config.php';
 
-        $info_id=1;
+        $info_id = 1;
         $sql = "SELECT informacja_opis FROM informacje WHERE id_info = $info_id";
-        $result = $mysqli->query($sql);
+        $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $informacja_opis = $row["informacja_opis"];
         } else {
             $informacja_opis = "Brak informacji";
         }
-        
         ?>
 
         <!-- Wyświetlenie tekstu z numerem zamówienia i opisu dostawy -->
         <div class="informacje">
             <?php
-            $text = $informacja_opis;
-            echo nl2br($text);
+            echo nl2br($informacja_opis);
             ?>
         </div>
     </informacje>
+
     <!-- STOPKA -->
-    <?php include 'footer_i.php';?>
+    <?php include 'footer_i.php'; ?>
 
     <!-- Zamykanie połączenia z bazą danych -->
-    <?php $mysqli->close(); ?>
+    <?php $conn->close(); ?>
 </body>
 </html>
