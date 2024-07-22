@@ -20,6 +20,7 @@ body {
 header {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
 header .logo img {
@@ -184,8 +185,16 @@ footer a {
     position: relative;
     left: 43%;
     transform: translate(-50%, -50%);
-    text-align: center;
     margin: 100px;
+    align-self: center;
+
+}
+
+.edtit-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
