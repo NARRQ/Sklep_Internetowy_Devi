@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEVI - Sprzedaż laptopów poleasingowych</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Link do FontAwesome dla ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header_i.php'; ?>
+    <?php include 'header.php'; ?>
 
     <informacje>
         <?php
         // Wczytaj konfigurację bazy danych
-        include '../baza/config.php';
+        include 'baza/config.php';
 
         $info_id = 1;
         $sql = "SELECT informacja_opis FROM informacje WHERE id_info = $info_id";
@@ -38,7 +38,7 @@
     </informacje>
 
     <!-- STOPKA -->
-    <?php include 'footer_i.php'; ?>
+    <?php include 'footer.php'; ?>
 
     <!-- Zamykanie połączenia z bazą danych -->
     <?php $conn->close(); ?>

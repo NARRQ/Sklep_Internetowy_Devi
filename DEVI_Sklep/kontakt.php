@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEVI - Sprzedaż laptopów poleasingowych</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Link do FontAwesome dla ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header_kon.php'; ?>
+    <?php include 'header.php'; ?>
     
     <main>
         <div class="wiersz_kontakt">
@@ -18,7 +18,7 @@
                 <h2>Kontakt</h2>
                 <?php
                 // Połączenie z bazą danych
-                include '../baza/config.php';
+                include 'baza/config.php';
                 
                 // Pobranie danych z bazy danych
                 $sql = "SELECT informacja_opis, nazwa_firmy, miasto, kod_pocztowy, ulica, numer_telefonu, kod_nip, dni_otwarcia, godziny_otwarcia, email FROM informacje WHERE id_info = 1"; // Możesz dostosować warunek WHERE do swoich potrzeb
@@ -56,7 +56,7 @@
         </div>
     </main>
     <!-- STOPKA -->
-    <?php include 'footer_kon.php'; ?>
+    <?php include 'footer.php'; ?>
 
     <!-- Zamykanie połączenia z bazą danych -->
     <?php mysqli_close($conn); ?>
