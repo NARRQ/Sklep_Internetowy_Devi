@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 10;
-	        padding: 0;
+            padding: 0;
         }
         main {
             padding: 100px;
@@ -23,8 +23,8 @@
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-	        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	        align-self: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            align-self: center;
             text-align: center;
         }
         h1 {
@@ -142,21 +142,18 @@
         <!-- LOGIKA POLACZENIA -->
         <?php
             require('../baza/config.php');
-            //wyswietlenie danych z bazy
+            // wyswietlenie danych z bazy
             $query = "SELECT 
                         z.id_zamowienia,
-                        l.nazwa,
                         z.data_zamowienia,
+                        GROUP_CONCAT(CONCAT(l.nazwa, ' : ', lz.ilosc, ' szt.') SEPARATOR '<br>') as laptopy,
                         z.status
                         from zamowienia z
                         JOIN lap_zamowienia lz on z.id_zamowienia=lz.id_zamowienia
-                        JOIN laptopy l on lz.id_laptopa=l.id_laptopa";
+                        JOIN laptopy l on lz.id_laptopa=l.id_laptopa
+                        GROUP BY z.id_zamowienia, z.data_zamowienia, z.status";
 	
             $result = mysqli_query($conn,$query);
-        
-            if($result){
-                $row=mysqli_fetch_assoc($result);
-            }
         ?>
     <div class="login-container">
         <h1>Panel Administratora  - Zarządzaj zamówieniami</h1>
@@ -178,8 +175,8 @@
                 {
                     echo "<tr>";
                     echo "<td>{$row['id_zamowienia']}</td>";
-                    echo "<td>{$row['nazwa']}</td>";
                     echo "<td>{$row['data_zamowienia']}</td>";
+                    echo "<td>{$row['laptopy']}</td>";
                     echo "<td>{$row['status']}</td>";
                     echo "<td><button><a href='#'>szczegóły</a></button></td>";
                     echo "</tr>";
