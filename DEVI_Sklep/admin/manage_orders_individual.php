@@ -27,6 +27,10 @@
 	        align-self: center;
             text-align: center;
         }
+        .order-info, .customer-info, .additional-info{
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
         h1 {
             margin-top: 0;
         }
@@ -138,7 +142,7 @@
                 function renderOrderButton($status) {
                     switch($status) {
                         case 'Nowy':
-                            echo '<button>Zatwierdź zamówienie</button>';
+                            echo "<button><a href='manage_orders_script.php?id={$row['id_zamowienia']}?info=zatwierdz'>Zatwierdź zamówienie</button>";
                             echo '<button>Odrzuć zamówienie</button>';
                             break;
                         case 'W trakcie':
@@ -155,28 +159,33 @@
         <div class="container">
             <div><h3>ZDJECIE</h3></div>
             <div>
-                <?php echo $row['laptopy'],$row['cena_calkowita']?>
+                <span><?php echo $row['laptopy']?></span>
+                <span><?php echo $row['cena_calkowita']?></span>
             </div>
         </div>
         <div class="container">
             <div>
-                <?php echo $row['klient']?>
-                <br>
-                <?php echo $row['email']?>    
-                <br>
-                <?php echo $row['telefon']?>
-                <br>
-                <?php echo $row['data_zamowienia']?>
-                <br>
-                <?php echo $row['dodatkowe_informacje']?>
-                <br>
-                
+                <div class="customer-info">
+                    <?php echo $row['klient']?>
+                    <br>
+                    <?php echo $row['email']?>    
+                    <br>
+                    <?php echo $row['telefon']?>
+                    <br>
+                    <?php echo $row['data_zamowienia']?>
+                    <br>
+                </div>
+                <div class="additional-info">
+                    <?php echo $row['dodatkowe_informacje']?>
+                </div>
             </div>
             <div>
+                <h3>Status zamówienia: </h3>
                 <?php echo $row['status']?>
                 <br>
                 <?php renderOrderButton($order_status); ?>
             </div>
+        </div>
         </div>
     </div>
     <?php
