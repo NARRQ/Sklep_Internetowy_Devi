@@ -289,20 +289,25 @@
         <div class="container">
             <!-- Wyświetlanie ogłoszeń -->
             <?php
-            // Odczyt ogłoszeń
             require('../baza/config.php');
-            $query = "SELECT * FROM `laptopy`";
-        
+
+            // Query to get laptop details including the miniatura field
+            $query = "
+                SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
+                FROM laptopy l
+                LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
+                GROUP BY l.id_laptopa
+            ";
+
             $announcements = mysqli_query($conn, $query);
-            
+
             if ($announcements && mysqli_num_rows($announcements) > 0) {
                 while ($announcement = mysqli_fetch_assoc($announcements)) {
                     $zdjecia = explode(',', $announcement['zdjecia']);
-                    $miniatura = !empty($zdjecia) ? $zdjecia[0] : '';
             ?>
             <div class="announcement" 
                  data-index="<?php echo $announcement['id_laptopa']; ?>"
-                 data-miniatura="../<?php echo $miniatura; ?>"
+                  data-miniatura="<?php echo $announcement['miniatura']; ?>"
                  data-nazwa="<?php echo $announcement['nazwa']; ?>"
                  data-cena="<?php echo $announcement['cena']; ?>"
                  data-producent="<?php echo $announcement['producent']; ?>"
