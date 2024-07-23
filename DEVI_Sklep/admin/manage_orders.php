@@ -179,7 +179,7 @@
                     echo "<td>{$row['data_zamowienia']}</td>";
                     echo "<td>{$row['laptopy']}</td>";
                     echo "<td>{$row['status']}</td>";
-                    echo "<td><button><a href='#'>szczegóły</a></button></td>";
+                    echo "<td><button><a href='manage_orders_individual.php?id={$row['id_zamowienia']}'>szczegóły</a></button></td>";
                     echo "</tr>";
                 }
             ?>
