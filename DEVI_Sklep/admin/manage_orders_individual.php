@@ -160,7 +160,6 @@
         </div>
         <div class="container">
             <div>
-                <h1>Info klienta</h1>
                 <?php echo $row['klient']?>
                 <br>
                 <?php echo $row['email']?>    
@@ -169,13 +168,11 @@
                 <br>
                 <?php echo $row['data_zamowienia']?>
                 <br>
-                <h2>Dodatkowe informacje</h2>
                 <?php echo $row['dodatkowe_informacje']?>
                 <br>
                 
             </div>
             <div>
-                <h1>PRZYCISKI</h1>
                 <?php echo $row['status']?>
                 <br>
                 <?php renderOrderButton($order_status); ?>
