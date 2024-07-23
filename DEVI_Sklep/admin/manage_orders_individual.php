@@ -117,6 +117,7 @@
             $id=$_GET['id'];
             $query="SELECT 
                 GROUP_CONCAT(k.imie,' ',k.nazwisko) as klient,
+                GROUP_CONCAT(k.ulica,' ',k.nr_lokalu,' ',k.kod_pocztowy,' ',k.miasto) as adres,
                 k.email,
                 k.telefon,
                 z.data_zamowienia,
@@ -131,7 +132,7 @@
                 JOIN klienci k on k.id_klienta=z.id_klienta 
                 JOIN lap_zamowienia lz on z.id_zamowienia=lz.id_zamowienia
                 JOIN laptopy l on lz.id_laptopa=l.id_laptopa
-                WHERE z.id_zamowienia=$id;
+                WHERE z.id_zamowienia=$id
             ";
             $result=mysqli_query($conn,$query);
             
@@ -139,20 +140,20 @@
             {
                 $row=mysqli_fetch_assoc($result);
                 $order_status = $row['status'];
-                function renderOrderButton($status) {
+                function renderOrderButton($id, $status) {
                     switch($status) {
                         case 'Nowy':
-                            echo "<button><a href='manage_orders_script.php?id={$row['id_zamowienia']}?info=zatwierdz'>Zatwierdź zamówienie</button>";
-                            echo '<button>Odrzuć zamówienie</button>';
+                            echo "<button><a href='manage_orders_script.php?id=$id&action=zatwierdz'>Zatwierdź zamówienie</a></button>";
+                            echo "<button><a href='manage_orders_script.php?id=$id&action=odrzuc'>Odrzuć zamówienie</a></button>";
                             break;
                         case 'W trakcie':
-                            echo '<button>Odrzuć zamówienie</button>';
+                            echo "<button><a href='manage_orders_script.php?id=$id&action=odrzuc'>Odrzuć zamówienie</a></button>";
                             break;
                         case 'Zakończony':
-                            echo '<button>Usuń zamówienie</button>';
+                            echo "<button><a href='manage_orders_script.php?id=$id&action=usun'>Usuń zamówienie</a></button>";
                             break;
                         default:
-                            echo '<button>Nieznany status</button>';
+                            echo "<button>Nieznany status</button>";
                     }
                 }
     ?>
@@ -168,10 +169,16 @@
                 <div class="customer-info">
                     <?php echo $row['klient']?>
                     <br>
+                    <h3>Email: </h3>
                     <?php echo $row['email']?>    
                     <br>
+                    <h3>Numer telefonu: </h3>
                     <?php echo $row['telefon']?>
                     <br>
+                    <h3>Adres: </h3>
+                    <?php echo $row['adres']?>
+                    <br>
+                    <h3>Data zamówienia: </h3>
                     <?php echo $row['data_zamowienia']?>
                     <br>
                 </div>
@@ -183,7 +190,7 @@
                 <h3>Status zamówienia: </h3>
                 <?php echo $row['status']?>
                 <br>
-                <?php renderOrderButton($order_status); ?>
+                <?php renderOrderButton($id,$order_status); ?>
             </div>
         </div>
         </div>
