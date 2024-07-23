@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Lip 18, 2024 at 10:29 PM
+-- Generation Time: Lip 23, 2024 at 12:39 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -155,31 +155,10 @@ CREATE TABLE `laptopy` (
 --
 
 INSERT INTO `laptopy` (`id_laptopa`, `producent`, `nazwa`, `procesor`, `procesor_sz`, `ram`, `grafika`, `dysk`, `klawiatura`, `przekatna`, `rozdzielczosc`, `matryca`, `system`, `porty`, `komunikacja`, `multimedia`, `stan`, `czas_pracy`, `zasilacz`, `opis`, `cena`, `ilosc`, `miniatura`, `miniatura_nazwa`, `czy_na_stronie`) VALUES
-(1, 'HP', 'HP ProBook 450 G6', 'Intel Core i5', '8565U', '8 GB (DDR4, 2400 MHz)', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080 (Full HD', 'matowa', 'Microsoft Windows 11 Pro', 'USB 2.0 - 1 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nUSB Typu-C (z DisplayPort) - 1 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, mikrofon, głośnik', 'Laptop poleasingowy, stan bardzo dobry', '8 godzin', 'Tak', '15-calowy HP ProBook 450 G6 to świetna propozycja dla biznesmenów; przestronny ekran, numeryczna klawiatura, a przede wszystkim zaawansowane funkcje zabezpieczeń, dzięki którym przechowywane na urządzeniu dane pozostaną bezpiecznie. ', 1699.00, 4, 'images/Hp_Probook_g6.png', 'Hp_Probook_g6.png', 1),
-(2, 'HP ', 'HP ProBook 450 G3', 'Intel Core i5', '6200U', '16 GB DDR4', 'Intel HD Graphics 520', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 10 Pro', 'USB 2.0 - 2 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nVGA (D-sub) - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, głośnik, mikrofon', 'Laptop poleasingowy, stan bardzo dobry', 'Do 8 godzin', 'Tak', 'HP ProBook 450 G3 to laptop, który oferuje solidną wydajność w połączeniu z wyrazistym wyglądem. Z procesorem Intel i5 6. generacji 6200U, 8 GB RAM i szybkim dyskiem o pojemności 500 GB, ten model spełnia oczekiwania użytkowników biznesowych.', 1599.00, 4, 'image/HP_ProBook_450_G3.png', 'HP_ProBook_450_G3.png', 1),
-(3, 'Dell', 'Dell Latitude 5490', 'Intel core i5', '7200U', '16 GB DDR4', 'Grafika zintegrowana, Intel HD 620', '256 GB', 'qwert', 14.10, '1920×1080', 'matowa', 'Windows 10 Home', 'USB 3.2 Gen. 1 – 3 szt.\r\nUSB Typu-C – 1 szt.\r\nHDMI – 1 szt.\r\nCzytnik kart pamięci SD – 1 szt.\r\nVGA (D-sub) – 1 szt.\r\nRJ-45 (LAN) – 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe – 1 szt.\r\nCzytnik Smart Card – 1 szt.\r\nDC-in (wejście zasilania) – 1 szt.', 'Wi-Fi', 'Czytnik kart pamięci, Głośniki', '100 % sprawny', '8 godzin', 'Tak', 'Lekka i smukła konstrukcja ułatwia transport laptopa.\r\nDługi czas pracy baterii pozwala na pracę przez cały dzień bez konieczności ładowania.\r\nPodświetlana klawiatura umożliwia komfortowe pisanie w ciemnych pomieszczeniach.', 1899.00, 5, 'image/Dell_Latitude_5490.png', 'Dell_Latitude_5490.png', 1),
-(4, 'MacBook', 'MacBook Air 13 A1932', 'Intel Core i5', '8210Y', '8 GB', 'Intel UHD Graphics 617', '256 GB', 'Butterfly (motylkowa)', 13.30, '2560 x 1600', 'Retina ', 'Oryginalny system operacyjny MacOS', 'USB 3.1 typ C, Thunderbolt, minijack 3,5 mm (audio)', 'Wi-Fi, Bluetooth', 'głośniki, kamera, mikrofon', '100 % sprawny', '8 godzin', 'Tak', 'Najpopular­niejszy Mac  zawróci Ci w głowie. Nowy MacBook Air jest smuklejszy, lżejszy i ma olśniewający wyświetlacz Retina, Touch ID, klawiaturę najnowszej generacji oraz gładzik Force Touch. Jego legendarna konstrukcja w kształcie klina jest wykonana z aluminium pochodzącego w 100 procentach z recyklingu, co czyni go najbardziej ekologicznym ze wszystkich Maców. Krótko mówiąc, MacBook Air to doskonały ultraprzenośny notebook do wszystkiego.', 1699.00, 6, 'image/MacBook_Air_a1932.png', 'MacBook_Air_a1932.png', 1);
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `lap_koszyk`
---
-
-CREATE TABLE `lap_koszyk` (
-  `id_sesji` varchar(40) NOT NULL,
-  `id_laptopa` int(11) NOT NULL,
-  `ilosc` int(11) UNSIGNED NOT NULL,
-  `cena_razem` decimal(10,2) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lap_koszyk`
---
-
-INSERT INTO `lap_koszyk` (`id_sesji`, `id_laptopa`, `ilosc`, `cena_razem`) VALUES
-('8f4e65a4b9f8e1c2a3d4e5f6b7a8d9c0', 3, 2, 3798.00),
-('7f4e265a4b9f8e1c2a3d4e5f6b7a8d9c', 4, 3, 5097.00);
+(1, 'HP', 'HP ProBook 450 G6', 'Intel Core i5', '8565U', '8 GB (DDR4, 2400 MHz)', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080 (Full HD', 'matowa', 'Microsoft Windows 11 Pro', 'USB 2.0 - 1 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nUSB Typu-C (z DisplayPort) - 1 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, mikrofon, głośnik', 'Laptop poleasingowy, stan bardzo dobry', '8 godzin', 'Tak', '15-calowy HP ProBook 450 G6 to świetna propozycja dla biznesmenów; przestronny ekran, numeryczna klawiatura, a przede wszystkim zaawansowane funkcje zabezpieczeń, dzięki którym przechowywane na urządzeniu dane pozostaną bezpiecznie. ', 1699.00, 4, 'uploads/g6.png', 'g6.png', 1),
+(2, 'HP ', 'HP ProBook 450 G3', 'Intel Core i5', '6200U', '16 GB DDR4', 'Intel HD Graphics 520', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 10 Pro', 'USB 2.0 - 2 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nVGA (D-sub) - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, głośnik, mikrofon', 'Laptop poleasingowy, stan bardzo dobry', 'Do 8 godzin', 'Tak', 'HP ProBook 450 G3 to laptop, który oferuje solidną wydajność w połączeniu z wyrazistym wyglądem. Z procesorem Intel i5 6. generacji 6200U, 8 GB RAM i szybkim dyskiem o pojemności 500 GB, ten model spełnia oczekiwania użytkowników biznesowych.', 1599.00, 4, 'uploads/hp_g31.png', 'hp_g31.png', 1),
+(3, 'Dell', 'Dell Latitude 5490', 'Intel core i5', '7200U', '16 GB DDR4', 'Grafika zintegrowana, Intel HD 620', '256 GB', 'qwert', 14.10, '1920×1080', 'matowa', 'Windows 10 Home', 'USB 3.2 Gen. 1 – 3 szt.\r\nUSB Typu-C – 1 szt.\r\nHDMI – 1 szt.\r\nCzytnik kart pamięci SD – 1 szt.\r\nVGA (D-sub) – 1 szt.\r\nRJ-45 (LAN) – 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe – 1 szt.\r\nCzytnik Smart Card – 1 szt.\r\nDC-in (wejście zasilania) – 1 szt.', 'Wi-Fi', 'Czytnik kart pamięci, Głośniki', '100 % sprawny', '8 godzin', 'Tak', 'Lekka i smukła konstrukcja ułatwia transport laptopa.\r\nDługi czas pracy baterii pozwala na pracę przez cały dzień bez konieczności ładowania.\r\nPodświetlana klawiatura umożliwia komfortowe pisanie w ciemnych pomieszczeniach.', 1899.00, 5, 'uploads/dell.png', 'dell.png', 1),
+(4, 'MacBook', 'MacBook Air 13 A1932', 'Intel Core i5', '8210Y', '8 GB', 'Intel UHD Graphics 617', '256 GB', 'Butterfly (motylkowa)', 13.30, '2560 x 1600', 'Retina ', 'Oryginalny system operacyjny MacOS', 'USB 3.1 typ C, Thunderbolt, minijack 3,5 mm (audio)', 'Wi-Fi, Bluetooth', 'głośniki, kamera, mikrofon', '100 % sprawny', '8 godzin', 'Tak', 'Najpopular­niejszy Mac  zawróci Ci w głowie. Nowy MacBook Air jest smuklejszy, lżejszy i ma olśniewający wyświetlacz Retina, Touch ID, klawiaturę najnowszej generacji oraz gładzik Force Touch. Jego legendarna konstrukcja w kształcie klina jest wykonana z aluminium pochodzącego w 100 procentach z recyklingu, co czyni go najbardziej ekologicznym ze wszystkich Maców. Krótko mówiąc, MacBook Air to doskonały ultraprzenośny notebook do wszystkiego.', 1699.00, 6, 'uploads/mac1.webp', 'mac1.webp', 1);
 
 -- --------------------------------------------------------
 
@@ -201,7 +180,9 @@ CREATE TABLE `lap_zamowienia` (
 INSERT INTO `lap_zamowienia` (`id_zamowienia`, `id_laptopa`, `ilosc`, `cena_razem`) VALUES
 (1, 1, 1, 1699.00),
 (2, 4, 1, 1699.00),
-(3, 3, 1, 1899.00);
+(3, 3, 1, 1899.00),
+(4, 1, 1, 1111.00),
+(1, 2, 1, 299.00);
 
 -- --------------------------------------------------------
 
@@ -224,9 +205,10 @@ CREATE TABLE `zamowienia` (
 --
 
 INSERT INTO `zamowienia` (`id_zamowienia`, `status`, `id_klienta`, `data_zamowienia`, `dodatkowe_informacje`, `cena_calkowita`, `id_dostawy`) VALUES
-(1, 'W trakcie', 1, '2024-07-11 11:22:55', 'Odbiore 21.12.2024', 1699.00, 1),
+(1, 'W trakcie', 1, '2024-07-11 11:22:55', 'Odbiore 21.12.2024', 2000.00, 1),
 (2, 'Nowy', 2, '2024-07-12 11:27:54', 'Prosze o kolor czarny', 1699.00, 2),
-(3, 'Zakończony', 3, '2024-07-14 11:32:14', '', 1899.00, 3);
+(3, 'Zakończony', 3, '2024-07-14 11:32:14', '', 1899.00, 3),
+(4, 'Nowy', 1, '2024-07-22 18:55:42', NULL, 1111.00, 1);
 
 -- --------------------------------------------------------
 
@@ -246,8 +228,8 @@ CREATE TABLE `zdjecia` (
 --
 
 INSERT INTO `zdjecia` (`id_zdjecia`, `id_laptopa`, `sciezka`, `nazwa`) VALUES
-(1, 3, 'image/Dell_Latitude.png', 'Dell_Latitude.png'),
-(2, 4, 'image/MacBook_Air_a1932.png', 'MacBook_Air_a1932.png');
+(1, 3, 'uploads/dell.png', 'dell.png'),
+(2, 4, 'uploads/g66.jpg', 'g66.jpg');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -282,12 +264,6 @@ ALTER TABLE `klienci`
 --
 ALTER TABLE `laptopy`
   ADD PRIMARY KEY (`id_laptopa`);
-
---
--- Indeksy dla tabeli `lap_koszyk`
---
-ALTER TABLE `lap_koszyk`
-  ADD KEY `id_laptopa` (`id_laptopa`);
 
 --
 -- Indeksy dla tabeli `lap_zamowienia`
@@ -349,7 +325,7 @@ ALTER TABLE `laptopy`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `zdjecia`
@@ -366,12 +342,6 @@ ALTER TABLE `zdjecia`
 --
 ALTER TABLE `dostawa`
   ADD CONSTRAINT `dostawa_ibfk_1` FOREIGN KEY (`id_dostawy`) REFERENCES `zamowienia` (`id_dostawy`) ON DELETE NO ACTION ON UPDATE CASCADE;
-
---
--- Constraints for table `lap_koszyk`
---
-ALTER TABLE `lap_koszyk`
-  ADD CONSTRAINT `lap_koszyk_ibfk_1` FOREIGN KEY (`id_laptopa`) REFERENCES `laptopy` (`id_laptopa`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `lap_zamowienia`
