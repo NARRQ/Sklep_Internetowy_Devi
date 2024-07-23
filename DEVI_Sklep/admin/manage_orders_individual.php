@@ -99,6 +99,13 @@
             border-radius: 4px;
         }
     </style>
+    <script>
+        function confirmDelete(url) {
+            if (confirm("Czy na pewno chcesz usunąć to zamówienie?")) {
+                window.location.href = url;
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- NAGLOWEK -->
@@ -150,7 +157,7 @@
                             echo "<button><a href='manage_orders_script.php?id=$id&action=odrzuc'>Odrzuć zamówienie</a></button>";
                             break;
                         case 'Zakończony':
-                            echo "<button><a href='manage_orders_script.php?id=$id&action=usun'>Usuń zamówienie</a></button>";
+                            echo "<button onclick=\"confirmDelete('manage_orders_script.php?id=$id&action=usun')\">Usuń zamówienie</button>";
                             break;
                         default:
                             echo "<button>Nieznany status</button>";
