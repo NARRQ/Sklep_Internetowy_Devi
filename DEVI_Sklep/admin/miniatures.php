@@ -373,7 +373,7 @@
             const openModal = (announcement) => {
                 modalImg.src = announcement.dataset.miniatura;
                 modalTitle.textContent = announcement.dataset.nazwa;
-                modalPrice.textContent = `${announcement.dataset.cena} zł`;
+                modalPrice.textContent = `${announcement.dataset.cena}`;
                 modalProcessor.textContent = announcement.dataset.procesor;
                 modalRam.textContent = announcement.dataset.ram;
                 modalGraphics.textContent = announcement.dataset.grafika;
