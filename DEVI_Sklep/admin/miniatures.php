@@ -301,7 +301,7 @@
                     $miniatura = !empty($zdjecia) ? $zdjecia[0] : '';
             ?>
             <div class="announcement" 
-                 data-index="<?php echo $announcement['id']; ?>"
+                 data-index="<?php echo $announcement['id_laptopa']; ?>"
                  data-miniatura="../<?php echo $miniatura; ?>"
                  data-nazwa="<?php echo $announcement['nazwa']; ?>"
                  data-cena="<?php echo $announcement['cena']; ?>"
