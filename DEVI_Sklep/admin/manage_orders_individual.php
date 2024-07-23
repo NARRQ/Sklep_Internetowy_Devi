@@ -119,6 +119,7 @@
                 z.dodatkowe_informacje,
                 z.cena_calkowita,
                 z.status,
+                l.miniatura,
                 GROUP_CONCAT(CONCAT(
                     l.nazwa,l.procesor,l.ram,l.dysk,l.system, ' : ', lz.ilosc, ' szt.'
                 ) SEPARATOR '<br>') as laptopy
@@ -133,9 +134,29 @@
             if($result)
             {
                 $row=mysqli_fetch_assoc($result);
+                $order_status = $row['status'];
+                function renderOrderButton($status) {
+                    switch($status) {
+                        case 'Nowy':
+                            echo '<button>Zatwierdź zamówienie</button>';
+                            echo '<button>Odrzuć zamówienie</button>';
+                            break;
+                        case 'W trakcie':
+                            echo '<button>Odrzuć zamówienie</button>';
+                            break;
+                        case 'Zakończony':
+                            echo '<button>Usuń zamówienie</button>';
+                            break;
+                        default:
+                            echo '<button>Nieznany status</button>';
+                    }
+                }
     ?>
-        <div>info o laptopie
-            <?php echo $row['laptopy']?>
+        <div class="container">
+            <div><h3>ZDJECIE</h3></div>
+            <div>
+                <?php echo $row['laptopy'],$row['cena_calkowita']?>
+            </div>
         </div>
         <div class="container">
             <div>
@@ -154,8 +175,10 @@
                 
             </div>
             <div>
-                <button>Przyciski</button>
-                
+                <h1>PRZYCISKI</h1>
+                <?php echo $row['status']?>
+                <br>
+                <?php renderOrderButton($order_status); ?>
             </div>
         </div>
     </div>
