@@ -288,7 +288,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div>
                     <label for="price">Cena:</label>
-                    <input type="number" id="price" name="price" required>
+                    <input type="number" id="price" name="price" min="0" step="0.01" required>
                 </div>
                 <div>
                     <label for="quantity">Ilość na stanie:</label>
