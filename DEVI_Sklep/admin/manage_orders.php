@@ -152,7 +152,7 @@
                         JOIN lap_zamowienia lz on z.id_zamowienia=lz.id_zamowienia
                         JOIN laptopy l on lz.id_laptopa=l.id_laptopa
                         GROUP BY z.id_zamowienia, z.data_zamowienia, z.status
-                        ORDER BY z.data_zamowienia";
+                        ORDER BY z.data_zamowienia desc";
 	
             $result = mysqli_query($conn,$query);
         ?>
