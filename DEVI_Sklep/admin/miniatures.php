@@ -330,7 +330,7 @@
                  data-opis="<?php echo $announcement['opis']; ?>"
                  data-ilosc="<?php echo $announcement['ilosc']; ?>"
                  data-zdjecia="<?php echo implode(',', $zdjecia); ?>">
-                <img src="../<?php echo $miniatura; ?>" alt="Miniatura produktu">
+                <img src="<?php echo $announcement['miniatura']; ?>">
                 <div class="summary">
                     <h2><?php echo $announcement['nazwa']; ?></h2>
                     <p><strong>Cena:</strong> <?php echo $announcement['cena']; ?> zł</p>
