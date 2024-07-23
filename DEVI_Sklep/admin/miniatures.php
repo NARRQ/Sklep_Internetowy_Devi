@@ -381,9 +381,13 @@
 
                 modalSpecification.innerHTML = `
                     <h3>Specyfikacja</h3>
+                    <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
                     <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
+                    <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
                     <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
+                    <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
                     <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
+                    <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
                     <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
                     <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
                     <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
