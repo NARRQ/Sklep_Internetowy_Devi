@@ -14,10 +14,10 @@
             <nav>
                 <ul>
                     <li><a href="#">Laptopy</a></li>
-                    <li><a href="../informacje.php">Informacje</a></li>
-                    <li><a href="../kontakt.php">Kontakt</a></li>
+                    <li><a href="#">Informacje</a></li>
+                    <li><a href="#">Kontakt</a></li>
                     <li><a href="#" class="cart">
-                        <img src="../img/9025885_shopping_cart_icon.png" alt="Koszyk" class="cart-icon">
+                        <img src="../img/f336a94c-01dc-8157-8004-994dd4e7e535.png" class="cart-icon">
                     </a></li>
                 </ul>
             </nav>
