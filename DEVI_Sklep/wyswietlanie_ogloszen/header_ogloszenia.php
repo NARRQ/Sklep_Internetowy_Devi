@@ -13,9 +13,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Laptopy</a></li>
-                    <li><a href="#">Informacje</a></li>
-                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="miniatures.php">Laptopy</a></li>
+                    <li><a href="../informacje.php">Informacje</a></li>
+                    <li><a href="../kontakt.php">Kontakt</a></li>
                     <li><a href="#" class="cart">
                         <img src="../img/f336a94c-01dc-8157-8004-994dd4e7e535.png" class="cart-icon">
                     </a></li>

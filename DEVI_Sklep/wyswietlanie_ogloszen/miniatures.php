@@ -315,7 +315,7 @@
             </div>
             <div class="add-to-cart">
                 <label for="modal-quantity">Ilość:</label>
-                <input type="number" id="modal-quantity" min="1" value="1">
+                <input type="number" id="modal-quantity" min="1" value="1"  max="<?php echo $announcement['ilosc']; ?>">
                 <p id="modal-stock"></p>
                 <button id="modal-add-to-cart"><i class="fas fa-shopping-cart"></i> Dodaj do koszyka</button>
             </div>
@@ -442,145 +442,145 @@
     <!-- STOPKA -->
     <?php include '../footer.php'; ?>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById("announcementModal");
-            const modalImg = document.getElementById("modal-image");
-            const modalTitle = document.getElementById("modal-title");
-            const modalPrice = document.getElementById("modal-price");
-            const modalProcessor = document.getElementById("modal-processor");
-            const modalRam = document.getElementById("modal-ram");
-            const modalGraphics = document.getElementById("modal-graphics");
-            const modalStock = document.getElementById("modal-stock");
-            const addToCartBtn = document.getElementById("modal-add-to-cart");
-            const closeModal = document.querySelector(".close");
-            const modalSpecification = document.getElementById("modal-specification");
-            const modalDescription = document.getElementById("modal-description");
-            const prevArrow = document.querySelector('.arrow.prev');
-            const nextArrow = document.querySelector('.arrow.next');
+       document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById("announcementModal");
+    const modalImg = document.getElementById("modal-image");
+    const modalTitle = document.getElementById("modal-title");
+    const modalPrice = document.getElementById("modal-price");
+    const modalProcessor = document.getElementById("modal-processor");
+    const modalRam = document.getElementById("modal-ram");
+    const modalGraphics = document.getElementById("modal-graphics");
+    const modalStock = document.getElementById("modal-stock");
+    const modalQuantity = document.getElementById("modal-quantity");
+    const addToCartBtn = document.getElementById("modal-add-to-cart");
+    const closeModal = document.querySelector(".close");
+    const modalSpecification = document.getElementById("modal-specification");
+    const modalDescription = document.getElementById("modal-description");
+    const prevArrow = document.querySelector('.arrow.prev');
+    const nextArrow = document.querySelector('.arrow.next');
 
-            let currentIndex = 0;
-            let currentAnnouncement = null;
+    let currentIndex = 0;
+    let currentAnnouncement = null;
 
-            const openModal = (announcement) => {
-                const images = announcement.dataset.zdjecia.split(',');
-                currentIndex = 0; // Ustawienie początkowego indeksu na pierwszy obraz
-                modalImg.src = images[currentIndex];
-                modalTitle.textContent = announcement.dataset.nazwa;
-                modalPrice.textContent = `${announcement.dataset.cena}`;
-                modalProcessor.textContent = announcement.dataset.procesor;
-                modalRam.textContent = announcement.dataset.ram;
-                modalGraphics.textContent = announcement.dataset.grafika;
-                modalStock.textContent = `Dostępność: ${announcement.dataset.ilosc} sztuk`;
+    const openModal = (announcement) => {
+        const images = announcement.dataset.zdjecia.split(',');
+        currentIndex = 0; // Ustawienie początkowego indeksu na pierwszy obraz
+        modalImg.src = images[currentIndex];
+        modalTitle.textContent = announcement.dataset.nazwa;
+        modalPrice.textContent = `${announcement.dataset.cena}`;
+        modalProcessor.textContent = announcement.dataset.procesor;
+        modalRam.textContent = announcement.dataset.ram;
+        modalGraphics.textContent = announcement.dataset.grafika;
+        modalStock.textContent = `Dostępność: ${announcement.dataset.ilosc} sztuk`;
+        
+        // Ustawienie maksymalnej ilości w polu input
+        modalQuantity.max = announcement.dataset.ilosc;
+        modalQuantity.value = 1; // Resetowanie wartości do 1 przy każdym otwarciu modala
 
-                modalSpecification.innerHTML = `
-                    <h3>Specyfikacja</h3>
-                    <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
-                    <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
-                    <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
-                    <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
-                    <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
-                    <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
-                    <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
-                    <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
-                    <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
-                    <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
-                    <p><strong>Typ matrycy:</strong> ${announcement.dataset.matryca}</p>
-                    <p><strong>System operacyjny:</strong> ${announcement.dataset.system}</p>
-                    <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
-                    <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
-                    <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
-                    <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
-                    <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
-                    <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
-                `;
+        modalSpecification.innerHTML = `
+            <h3>Specyfikacja</h3>
+            <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
+            <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
+            <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
+            <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
+            <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
+            <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
+            <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
+            <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
+            <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
+            <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
+            <p><strong>Typ matrycy:</strong> ${announcement.dataset.matryca}</p>
+            <p><strong>System operacyjny:</strong> ${announcement.dataset.system}</p>
+            <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
+            <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
+            <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
+            <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
+            <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
+            <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
+        `;
 
-                modalDescription.innerHTML = `
-                    <h3>Opis</h3>
-                    <p>${announcement.dataset.opis}</p>
-                `;
+        modalDescription.innerHTML = `
+            <h3>Opis</h3>
+            <p>${announcement.dataset.opis}</p>
+        `;
 
-                modal.style.display = "block";
-            };
+        modal.style.display = "block";
+    };
 
-            const closeModalFunction = () => {
-                modal.style.display = "none";
-            };
+    const closeModalFunction = () => {
+        modal.style.display = "none";
+    };
 
-            const showImage = (index) => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                if (index >= 0 && index < images.length) {
-                    modalImg.src = images[index];
-                }
-            };
+    const showImage = (index) => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        if (index >= 0 && index < images.length) {
+            modalImg.src = images[index];
+        }
+    };
 
-            prevArrow.addEventListener('click', () => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                showImage(currentIndex);
-            });
+    prevArrow.addEventListener('click', () => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+    });
 
-            nextArrow.addEventListener('click', () => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex + 1) % images.length;
-                showImage(currentIndex);
-            });
+    nextArrow.addEventListener('click', () => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+    });
 
-            document.querySelectorAll('.announcement').forEach(announcement => {
-                announcement.addEventListener('click', () => {
-                    currentAnnouncement = announcement;
-                    openModal(announcement);
-                });
-            });
-
-            closeModal.addEventListener('click', closeModalFunction);
-
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModalFunction();
-                }
-            });
-
-            document.getElementById('applyFilters').addEventListener('click', function() {
-                const brand = document.getElementById('brand').value || '';
-                const screenSizeFrom = document.getElementById('screenSizeFrom').value || '';
-                const screenSizeTo = document.getElementById('screenSizeTo').value || '';
-                const priceFrom = document.getElementById('priceFrom').value || '';
-                const priceTo = document.getElementById('priceTo').value || '';
-
-                // Initialize an empty array to hold the query parameters
-                let queryParams = [];
-
-                // Add parameters to the query string if they are not empty
-                if (brand) queryParams.push(`brand=${encodeURIComponent(brand)}`);
-                if (screenSizeFrom) queryParams.push(`screenSizeFrom=${encodeURIComponent(screenSizeFrom)}`);
-                if (screenSizeTo) queryParams.push(`screenSizeTo=${encodeURIComponent(screenSizeTo)}`);
-                if (priceFrom) queryParams.push(`priceFrom=${encodeURIComponent(priceFrom)}`);
-                if (priceTo) queryParams.push(`priceTo=${encodeURIComponent(priceTo)}`);
-
-                // Join all parameters with '&' and prepend with '?'
-                let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-
-                // Debugging output
-                console.log(`Redirecting to: miniatures.php${queryString}`);
-
-                // Redirect with query parameters
-                window.location.href = `miniatures.php${queryString}`;  
-            });
-
-
-            
-            
-
-
-
-            
-
-
-
-
-
-            
+    document.querySelectorAll('.announcement').forEach(announcement => {
+        announcement.addEventListener('click', () => {
+            currentAnnouncement = announcement;
+            openModal(announcement);
         });
+    });
+
+    closeModal.addEventListener('click', closeModalFunction);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModalFunction();
+        }
+    });
+
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        const brand = document.getElementById('brand').value || '';
+        const screenSizeFrom = document.getElementById('screenSizeFrom').value || '';
+        const screenSizeTo = document.getElementById('screenSizeTo').value || '';
+        const priceFrom = document.getElementById('priceFrom').value || '';
+        const priceTo = document.getElementById('priceTo').value || '';
+
+        // Initialize an empty array to hold the query parameters
+        let queryParams = [];
+
+        // Add parameters to the query string if they are not empty
+        if (brand) queryParams.push(`brand=${encodeURIComponent(brand)}`);
+        if (screenSizeFrom) queryParams.push(`screenSizeFrom=${encodeURIComponent(screenSizeFrom)}`);
+        if (screenSizeTo) queryParams.push(`screenSizeTo=${encodeURIComponent(screenSizeTo)}`);
+        if (priceFrom) queryParams.push(`priceFrom=${encodeURIComponent(priceFrom)}`);
+        if (priceTo) queryParams.push(`priceTo=${encodeURIComponent(priceTo)}`);
+
+        // Join all parameters with '&' and prepend with '?'
+        let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+        // Debugging output
+        console.log(`Redirecting to: miniatures.php${queryString}`);
+
+        // Redirect with query parameters
+        window.location.href = `miniatures.php${queryString}`;  
+    });
+
+    // Dodaj walidację w polu ilości
+    modalQuantity.addEventListener('input', function() {
+        const maxQuantity = parseInt(modalQuantity.max, 10);
+        if (parseInt(modalQuantity.value, 10) > maxQuantity) {
+            modalQuantity.value = maxQuantity;
+        }
+    });
+
+});
     </script>
 </body>
 </html>
