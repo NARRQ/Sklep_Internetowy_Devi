@@ -154,7 +154,6 @@
             background-color: #f9f9f9;
             flex: 1 1 45%;
             margin: 10px;
-            margin-right: 500px;
         }
 
         .modal-content .header .mini-info .info-box p {
@@ -167,7 +166,6 @@
             align-items: flex-end;
             margin-left: auto;
             text-align: right;
-            margin-top: -180px;
         }
 
         .modal-content .header .mini-info .price-container p {
@@ -177,10 +175,10 @@
         }
 
         .modal-content .add-to-cart {
-            margin-top: -60px;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            margin-top: 20px;
         }
 
         .modal-content .add-to-cart label {
@@ -204,7 +202,6 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-            margin-top: 10px;
         }
 
         .modal-content .add-to-cart button:hover {
@@ -292,30 +289,67 @@
         <div class="container">
             <!-- Wyświetlanie ogłoszeń -->
             <?php
-            // Odczyt ogłoszeń z pliku JSON
-            $announcements = json_decode(file_get_contents('announcements.json'), true);
+            require('../baza/config.php');
 
-            // Wyświetlanie każdego ogłoszenia
-            foreach ($announcements as $index => $announcement) : ?>
-                <div class="announcement" data-index="<?php echo $index; ?>">
-                    <img src="<?php echo $announcement['miniatura']; ?>" alt="Miniatura produktu">
-                    <div class="summary">
-                        <h2><?php echo $announcement['nazwa']; ?></h2>
-                        <p><strong>Cena:</strong> <?php echo $announcement['cena']; ?> zł</p>
-                        <p><strong>Producent:</strong> <?php echo $announcement['producent']; ?></p>
-                        <p><strong>Procesor:</strong> <?php echo $announcement['procesor']; ?></p>
-                        <p><strong>Pamięć RAM:</strong> <?php echo $announcement['ram']; ?></p>
-                        <p><strong>Grafika:</strong> <?php echo $announcement['grafika']; ?></p>
-                        <!-- Przyciski usunięcia zostały usunięte -->
-                    </div>
+            // Query to get laptop details including the miniatura field
+            $query = "
+                SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
+                FROM laptopy l
+                LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
+                GROUP BY l.id_laptopa
+            ";
+
+            $announcements = mysqli_query($conn, $query);
+
+            if ($announcements && mysqli_num_rows($announcements) > 0) {
+                while ($announcement = mysqli_fetch_assoc($announcements)) {
+                    $zdjecia = explode(',', $announcement['zdjecia']);
+            ?>
+            <div class="announcement" 
+                 data-index="<?php echo $announcement['id_laptopa']; ?>"
+                  data-miniatura="<?php echo $announcement['miniatura']; ?>"
+                 data-nazwa="<?php echo $announcement['nazwa']; ?>"
+                 data-cena="<?php echo $announcement['cena']; ?>"
+                 data-producent="<?php echo $announcement['producent']; ?>"
+                 data-procesor="<?php echo $announcement['procesor']; ?>"
+                 data-ram="<?php echo $announcement['ram']; ?>"
+                 data-grafika="<?php echo $announcement['grafika']; ?>"
+                 data-procesorsz="<?php echo $announcement['procesor_sz']; ?>"
+                 data-dysk="<?php echo $announcement['dysk']; ?>"
+                 data-klawiatura="<?php echo $announcement['klawiatura']; ?>"
+                 data-przekatna="<?php echo $announcement['przekatna']; ?>"
+                 data-rozdzielczosc="<?php echo $announcement['rozdzielczosc']; ?>"
+                 data-matryca="<?php echo $announcement['matryca']; ?>"
+                 data-system="<?php echo $announcement['system']; ?>"
+                 data-porty="<?php echo $announcement['porty']; ?>"
+                 data-komunikacja="<?php echo $announcement['komunikacja']; ?>"
+                 data-multimedia="<?php echo $announcement['multimedia']; ?>"
+                 data-stan="<?php echo $announcement['stan']; ?>"
+                 data-czaspracy="<?php echo $announcement['czas_pracy']; ?>"
+                 data-zasilacz="<?php echo $announcement['zasilacz']; ?>"
+                 data-opis="<?php echo $announcement['opis']; ?>"
+                 data-ilosc="<?php echo $announcement['ilosc']; ?>"
+                 data-zdjecia="<?php echo implode(',', $zdjecia); ?>">
+                <img src="<?php echo $announcement['miniatura']; ?>">
+                <div class="summary">
+                    <h2><?php echo $announcement['nazwa']; ?></h2>
+                    <p><strong>Cena:</strong> <?php echo $announcement['cena']; ?> zł</p>
+                    <p><strong>Producent:</strong> <?php echo $announcement['producent']; ?></p>
+                    <p><strong>Procesor:</strong> <?php echo $announcement['procesor']; ?></p>
+                    <p><strong>Pamięć RAM:</strong> <?php echo $announcement['ram']; ?></p>
+                    <p><strong>Grafika:</strong> <?php echo $announcement['grafika']; ?></p>
                 </div>
-            <?php endforeach; ?>
+            </div>
+            <?php
+                }
+            } else {
+                echo "<p>Brak ogłoszeń do wyświetlenia.</p>";
+            }
+            ?>
         </div>
     </main>
-
     <!-- STOPKA -->
     <?php include '../footer.php'; ?>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById("announcementModal");
@@ -325,7 +359,6 @@
             const modalProcessor = document.getElementById("modal-processor");
             const modalRam = document.getElementById("modal-ram");
             const modalGraphics = document.getElementById("modal-graphics");
-            const modalQuantity = document.getElementById("modal-quantity");
             const modalStock = document.getElementById("modal-stock");
             const addToCartBtn = document.getElementById("modal-add-to-cart");
             const closeModal = document.querySelector(".close");
@@ -336,39 +369,43 @@
 
             let currentIndex = 0;
             let currentAnnouncement = null;
-            const announcements = <?php echo json_encode($announcements); ?>;
 
-            const openModal = (index) => {
-                currentIndex = index;
-                currentAnnouncement = announcements[index];
-                modalImg.src = currentAnnouncement['zdjecia'][0];
-                modalTitle.textContent = currentAnnouncement['nazwa'];
-                modalPrice.textContent = currentAnnouncement['cena'];
-                modalProcessor.textContent = currentAnnouncement['procesor'];
-                modalRam.textContent = currentAnnouncement['ram'];
-                modalGraphics.textContent = currentAnnouncement['grafika'];
-                modalStock.textContent = `Dostępność: ${currentAnnouncement['ilosc']} sztuk`;
+            const openModal = (announcement) => {
+                modalImg.src = announcement.dataset.miniatura;
+                modalTitle.textContent = announcement.dataset.nazwa;
+                modalPrice.textContent = `${announcement.dataset.cena}`;
+                modalProcessor.textContent = announcement.dataset.procesor;
+                modalRam.textContent = announcement.dataset.ram;
+                modalGraphics.textContent = announcement.dataset.grafika;
+                modalStock.textContent = `Dostępność: ${announcement.dataset.ilosc} sztuk`;
+
                 modalSpecification.innerHTML = `
                     <h3>Specyfikacja</h3>
-                    <p><strong>Producent:</strong> ${currentAnnouncement['producent']}</p>
-                    <p><strong>Procesor szczegóły:</strong> ${currentAnnouncement['procesor_sz']}</p>
-                    <p><strong>Dysk:</strong> ${currentAnnouncement['dysk']}</p>
-                    <p><strong>Układ klawiatury:</strong> ${currentAnnouncement['klawiatura']}</p>
-                    <p><strong>Przekątna ekranu:</strong> ${currentAnnouncement['przekatna']}</p>
-                    <p><strong>Rozdzielczość:</strong> ${currentAnnouncement['rozdzielczosc']}</p>
-                    <p><strong>Typ matrycy:</strong> ${currentAnnouncement['matryca']}</p>
-                    <p><strong>System operacyjny:</strong> ${currentAnnouncement['system']}</p>
-                    <p><strong>Porty:</strong> ${currentAnnouncement['porty']}</p>
-                    <p><strong>Komunikacja:</strong> ${currentAnnouncement['komunikacja']}</p>
-                    <p><strong>Multimedia:</strong> ${currentAnnouncement['multimedia']}</p>
-                    <p><strong>Stan wizualny:</strong> ${currentAnnouncement['stan']}</p>
-                    <p><strong>Średni czas pracy na baterii:</strong> ${currentAnnouncement['czas_pracy']}</p>
-                    <p><strong>Zasilacz:</strong> ${currentAnnouncement['zasilacz']}</p>
+                    <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
+                    <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
+                    <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
+                    <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
+                    <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
+                    <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
+                    <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
+                    <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
+                    <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
+                    <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
+                    <p><strong>Typ matrycy:</strong> ${announcement.dataset.matryca}</p>
+                    <p><strong>System operacyjny:</strong> ${announcement.dataset.system}</p>
+                    <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
+                    <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
+                    <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
+                    <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
+                    <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
+                    <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
                 `;
+
                 modalDescription.innerHTML = `
                     <h3>Opis</h3>
-                    <p>${currentAnnouncement['opis']}</p>
+                    <p>${announcement.dataset.opis}</p>
                 `;
+
                 modal.style.display = "block";
             };
 
@@ -377,25 +414,28 @@
             };
 
             const showImage = (index) => {
-                if (index >= 0 && index < currentAnnouncement['zdjecia'].length) {
-                    modalImg.src = currentAnnouncement['zdjecia'][index];
+                const images = currentAnnouncement.dataset.zdjecia.split(',');
+                if (index >= 0 && index < images.length) {
+                    modalImg.src = images[index];
                 }
             };
 
             prevArrow.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + currentAnnouncement['zdjecia'].length) % currentAnnouncement['zdjecia'].length;
+                const images = currentAnnouncement.dataset.zdjecia.split(',');
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
                 showImage(currentIndex);
             });
 
             nextArrow.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % currentAnnouncement['zdjecia'].length;
+                const images = currentAnnouncement.dataset.zdjecia.split(',');
+                currentIndex = (currentIndex + 1) % images.length;
                 showImage(currentIndex);
             });
 
             document.querySelectorAll('.announcement').forEach(announcement => {
                 announcement.addEventListener('click', () => {
-                    const index = announcement.getAttribute('data-index');
-                    openModal(index);
+                    currentAnnouncement = announcement;
+                    openModal(announcement);
                 });
             });
 
