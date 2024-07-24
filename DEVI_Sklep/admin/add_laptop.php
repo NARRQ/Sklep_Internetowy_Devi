@@ -86,11 +86,11 @@ if (isset($_FILES['images'])) {
     $query = "INSERT INTO laptopy (
                 nazwa, producent, procesor, ram, dysk, procesor_sz, grafika, klawiatura,
                 przekatna, rozdzielczosc, matryca, system, porty, komunikacja, multimedia, stan,
-                czas_pracy, zasilacz, opis, cena, ilosc, miniatura, miniatura_nazwa
+                czas_pracy, zasilacz, opis, cena, ilosc, miniatura, miniatura_nazwa,czy_na_stronie
               ) VALUES (
                 '$nazwa', '$producent', '$procesor', '$ram', '$dysk', '$procesor_sz', '$grafika', '$klawiatura',
                 '$przekatna', '$rozdzielczosc', '$matryca', '$system', '$porty', '$komunikacja', '$multimedia', '$stan',
-                '$czas_pracy', '$zasilacz', '$opis', '$cena', '$ilosc', '$main_image_path', '" . basename($main_image_path) . "'
+                '$czas_pracy', '$zasilacz', '$opis', '$cena', '$ilosc', '$main_image_path', '" . basename($main_image_path) . "',1
               )";
 
     // Wykonanie zapytania SQL do tabeli 'laptopy'
@@ -306,11 +306,11 @@ if (isset($_FILES['images'])) {
                 </div>
                 <div>
                     <label for="screen_size">Przekątna ekranu:</label>
-                    <input type="text" id="screen_size" name="screen_size" min="1" required>
+                    <input type="number" id="screen_size" name="screen_size" min="1" required>
                 </div>
                 <div>
                     <label for="resolution">Rozdzielczość:</label>
-                    <input type="number" id="resolution" name="resolution" required>
+                    <input type="text" id="resolution" name="resolution" required>
                 </div>
                 <div>
                     <label for="matrix">Typ matrycy:</label>
