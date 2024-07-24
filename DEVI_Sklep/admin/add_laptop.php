@@ -1,63 +1,78 @@
 <?php
-$message = ''; // Inicjalizacja zmiennej na komunikat
+require('../baza/config.php');
 
-// Przykładowa obsługa dodawania ogłoszenia (prosty przykład)
+// Inicjalizacja zmiennej na komunikat
+$message = ''; 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Logika przetwarzania danych formularza
-    $image_paths = [];
-    $main_image = '';
-    
+    // Ustawianie zmiennych z danych formularza
+    $nazwa = mysqli_real_escape_string($conn, $_POST['name']);
+    $producent = mysqli_real_escape_string($conn, $_POST['manufacturer']);
+    $procesor = mysqli_real_escape_string($conn, $_POST['processor']);
+    $ram = mysqli_real_escape_string($conn, $_POST['ram']);
+    $dysk = mysqli_real_escape_string($conn, $_POST['disk']);
+    $procesor_sz = mysqli_real_escape_string($conn, $_POST['processor_size']);
+    $grafika = mysqli_real_escape_string($conn, $_POST['graphics']);
+    $klawiatura = mysqli_real_escape_string($conn, $_POST['keyboard']);
+    $przekatna = mysqli_real_escape_string($conn, $_POST['screen_size']);
+    $rozdzielczosc = mysqli_real_escape_string($conn, $_POST['resolution']);
+    $matryca = mysqli_real_escape_string($conn, $_POST['matrix']);
+    $system = mysqli_real_escape_string($conn, $_POST['system']);
+    $porty = mysqli_real_escape_string($conn, $_POST['ports']);
+    $komunikacja = mysqli_real_escape_string($conn, $_POST['communication']);
+    $multimedia = mysqli_real_escape_string($conn, $_POST['multimedia']);
+    $stan = mysqli_real_escape_string($conn, $_POST['condition']);
+    $czas_pracy = mysqli_real_escape_string($conn, $_POST['working_hours']);
+    $zasilacz = mysqli_real_escape_string($conn, $_POST['power_supply']);
+    $opis = mysqli_real_escape_string($conn, $_POST['description']);
+    $cena = mysqli_real_escape_string($conn, $_POST['price']);
+    $ilosc = mysqli_real_escape_string($conn, $_POST['quantity']);
+
     // Obsługa przesyłania plików
-    $upload_dir = 'uploads/';
-    if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
+    $main_image_path = '';
+    $additional_images_paths = [];
+
+    // Przesyłanie miniatury
+    if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] == 0) {
+        $main_image_path = 'uploads/' . basename($_FILES['main_image']['name']);
+        move_uploaded_file($_FILES['main_image']['tmp_name'], $main_image_path);
     }
 
-    if (!empty($_FILES['main_image']['name'])) {
-        $main_image = $upload_dir . basename($_FILES['main_image']['name']);
-        move_uploaded_file($_FILES['main_image']['tmp_name'], $main_image);
-    }
-
-    foreach ($_FILES['images']['name'] as $key => $image) {
-        $image_path = $upload_dir . basename($image);
-        if (move_uploaded_file($_FILES['images']['tmp_name'][$key], $image_path)) {
-            $image_paths[] = $image_path;
+    // Przesyłanie dodatkowych zdjęć
+    if (isset($_FILES['images'])) {
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+            if ($_FILES['images']['error'][$key] == 0) {
+                $path = 'uploads/' . basename($_FILES['images']['name'][$key]);
+                move_uploaded_file($tmp_name, $path);
+                $additional_images_paths[] = $path;
+            }
         }
     }
 
-    $laptop_details = array(
-        'nazwa' => $_POST['name'],
-        'producent' => $_POST['manufacturer'],
-        'procesor' => $_POST['processor'],
-        'ram' => $_POST['ram'],
-        'dysk' => $_POST['disk'],
-        'procesor_sz' => $_POST['processor_size'],
-        'grafika' => $_POST['graphics'],
-        'klawiatura' => $_POST['keyboard'],
-        'przekatna' => $_POST['screen_size'],
-        'rozdzielczosc' => $_POST['resolution'],
-        'matryca' => $_POST['matrix'],
-        'system' => $_POST['system'],
-        'porty' => $_POST['ports'],
-        'komunikacja' => $_POST['communication'],
-        'multimedia' => $_POST['multimedia'],
-        'stan' => $_POST['condition'],
-        'czas_pracy' => $_POST['working_hours'],
-        'zasilacz' => $_POST['power_supply'],
-        'opis' => $_POST['description'],
-        'cena' => $_POST['price'],
-        'ilosc' => $_POST['quantity'],
-        'miniatura' => $main_image,
-        'zdjecia' => $image_paths
-    );
+    // Przygotowanie zapytania SQL do tabeli 'laptopy'
+    $query = "INSERT INTO laptopy (
+                nazwa, producent, procesor, ram, dysk, procesor_sz, grafika, klawiatura,
+                przekatna, rozdzielczosc, matryca, system, porty, komunikacja, multimedia, stan,
+                czas_pracy, zasilacz, opis, cena, ilosc, miniatura, miniatura_nazwa
+              ) VALUES (
+                '$nazwa', '$producent', '$procesor', '$ram', '$dysk', '$procesor_sz', '$grafika', '$klawiatura',
+                '$przekatna', '$rozdzielczosc', '$matryca', '$system', '$porty', '$komunikacja', '$multimedia', '$stan',
+                '$czas_pracy', '$zasilacz', '$opis', '$cena', '$ilosc', '$main_image_path', '" . basename($main_image_path) . "'
+              )";
 
-    // Zapis danych ogłoszenia do pliku JSON
-    $announcements = json_decode(file_get_contents('announcements.json'), true);
-    $announcements[] = $laptop_details;
-    file_put_contents('announcements.json', json_encode($announcements, JSON_PRETTY_PRINT));
+    // Wykonanie zapytania SQL do tabeli 'laptopy'
+    if (mysqli_query($conn, $query)) {
+        $message = "Dodano nowe ogłoszenie: " . htmlspecialchars($nazwa);
+        $laptop_id = mysqli_insert_id($conn);
 
-    // Przykład komunikatu po dodaniu ogłoszenia
-    $message = "Dodano nowe ogłoszenie: " . $laptop_details['nazwa'];
+        // Dodanie dodatkowych zdjęć do tabeli 'zdjecia'
+        foreach ($additional_images_paths as $path) {
+            $query = "INSERT INTO zdjecia (id_laptopa, sciezka, nazwa) VALUES ('$laptop_id', '$path', '" . basename($path) . "')";
+            mysqli_query($conn, $query);
+        }
+    } else {
+        $message = "Błąd dodawania ogłoszenia: " . mysqli_error($conn);
+    }
 }
 ?>
 
@@ -76,34 +91,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0;
             padding: 0;
         }
-        header {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 100; /* nagłówek jest na wierzchu */
-            
-        }
         main {
-            padding: 50px;
-            margin-top: 95% ; /* Margines u góry dla przestrzeni pod nagłówkiem */
-            
-            
+            padding: 100px;
         }
-
-        .login-containerr {
-            background-color: #fff;
+        .edit-container {
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin: 0; /* Zmniejszono marginesy górne i dolne */
-            width: 90%; /* Ustawienie szerokości na 90% */
-            max-width: 900px; /* Maksymalna szerokość kontenera */
         }
-
         h1 {
             margin-top: 0;
         }
@@ -137,8 +136,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         form {
             display: flex;
             flex-direction: column;
-            
-            
         }
         form div {
             margin-bottom: 15px;
@@ -178,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Function to handle file input change and preview images
         function previewImages(input, previewContainer) {
             var previewDiv = document.getElementById(previewContainer);
-            previewDiv.innerHTML = ''; // Clear previous previews
+            
 
             if (input.files) {
                 var filesAmount = input.files.length;
@@ -217,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- NAGŁÓWEK -->
     <?php include 'header_admin.php'; ?>
     <main>
-        <div class="login-container">
+        <div class="edit-container">
             <h1>Panel Administratora - Dodaj ogłoszenie</h1>
             <button><a href="admin_page.php">Panel Administratora</a></button>
             <!-- Wyświetlanie komunikatu o dodaniu ogłoszenia -->
