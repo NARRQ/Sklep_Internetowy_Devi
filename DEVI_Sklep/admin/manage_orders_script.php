@@ -22,18 +22,62 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && isset($_GET['action'])) {
         case 'zatwierdz':
             $query = "UPDATE zamowienia SET status='W trakcie' WHERE id_zamowienia=$id";
             $subject = "Twoje zamówienie zostało zatwierdzone";
-            $message = "Drogi Kliencie,\n\nTwoje zamówienie nr $id zostało zatwierdzone i jest w trakcie realizacji.\nDEVI Piotr Dąbrowski
-                \ntel. 669958485
-                \nhttp://devisystem.pl/
-                \nfb. https://www.facebook.com/devisystem/";
+            // $message = "Drogi Kliencie,\n\nTwoje zamówienie nr $id zostało zatwierdzone i jest w trakcie realizacji.\nDEVI Piotr Dąbrowski
+            //     \ntel. 669958485
+            //     \nhttp://devisystem.pl/
+            //     \nfb. https://www.facebook.com/devisystem/";
+            $message = '
+            <!DOCTYPE html>
+                <html lang="pl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Twoje zamówienie zostało zatwierdzone</title>
+                </head>
+                <body>
+                    <h1>Dzień dobry!</h1>
+                    <p>
+                        Drogi Kliencie,
+                        \n\nTwoje zamówienie nr $id zostało zatwierdzone i jest w trakcie realizacji.    
+                    </p>
+                    <hr>
+                    <p>
+                        \nDEVI Piotr Dąbrowski
+                        \ntel. 669958485
+                        \nhttp://devisystem.pl/
+                        \nfb. https://www.facebook.com/devisystem/
+                    </p>
+                </body>
+                </html>
+            ';
             break;
         case 'odrzuc':
             $query = "UPDATE zamowienia SET status='Zakończony' WHERE id_zamowienia=$id";
             $subject = "Twoje zamówienie zostało odrzucone";
-            $message = "Drogi Kliencie,\n\nTwoje zamówienie nr $id zostało odrzucone.\n\nDEVI Piotr Dąbrowski
-                \ntel. 669958485
-                \nhttp://devisystem.pl/
-                \nfb. https://www.facebook.com/devisystem/";
+            $message = '
+            <!DOCTYPE html>
+                <html lang="pl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Twoje zamówienie zostało odrzucone</title>
+                </head>
+                <body>
+                    <h1>Dzień dobry!</h1>
+                    <p>
+                        Drogi Kliencie,
+                        \n\nDrogi Kliencie,\n\nTwoje zamówienie nr $id zostało odrzucone.    
+                    </p>
+                    <hr>
+                    <p>
+                        \nDEVI Piotr Dąbrowski
+                        \ntel. 669958485
+                        \nhttp://devisystem.pl/
+                        \nfb. https://www.facebook.com/devisystem/
+                    </p>
+                </body>
+                </html>
+            ';
             break;
         case 'usun':
             $query = "DELETE FROM zamowienia WHERE id_zamowienia=$id";
