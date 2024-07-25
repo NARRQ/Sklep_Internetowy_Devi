@@ -149,10 +149,87 @@
             <!-- LOGIKA -->
             <?php
                 require('../baza/config.php');
-                // wyswietlenie danych z bazy
+                
                 if(isset($_GET['id']) && is_numeric($_GET['id']))
                 {
                     $id=$_GET['id'];
+                    // Update record
+                    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                        $manufacturer = htmlentities($_POST['manufacturer']);
+                        $name = htmlentities($_POST['name']);
+                        $processor = htmlentities($_POST['processor']);
+                        $processor_size = htmlentities($_POST['processor_size']);
+                        $ram = htmlentities($_POST['ram']);
+                        $graphics = htmlentities($_POST['graphics']);
+                        $disk = htmlentities($_POST['disk']);
+                        $keyboard = htmlentities($_POST['keyboard']);
+                        $screen_size = htmlentities($_POST['screen_size']);
+                        $resolution = htmlentities($_POST['resolution']);
+                        $matrix = htmlentities($_POST['matrix']);
+                        $system = htmlentities($_POST['system']);
+                        $ports = htmlentities($_POST['ports']);
+                        $communication = htmlentities($_POST['communication']);
+                        $multimedia = htmlentities($_POST['multimedia']);
+                        $condition = htmlentities($_POST['condition']);
+                        $working_hours = htmlentities($_POST['working_hours']);
+                        $power_supply = htmlentities($_POST['power_supply']);
+                        $price = htmlentities($_POST['price']);
+                        $quantity = htmlentities($_POST['quantity']);
+                        $description = htmlentities($_POST['description']);
+                    
+                        $manufacturer = mysqli_real_escape_string($conn, $manufacturer);
+                        $name = mysqli_real_escape_string($conn, $name);
+                        $processor = mysqli_real_escape_string($conn, $processor);
+                        $processor_size = mysqli_real_escape_string($conn, $processor_size);
+                        $ram = mysqli_real_escape_string($conn, $ram);
+                        $graphics = mysqli_real_escape_string($conn, $graphics);
+                        $disk = mysqli_real_escape_string($conn, $disk);
+                        $keyboard = mysqli_real_escape_string($conn, $keyboard);
+                        $screen_size = mysqli_real_escape_string($conn, $screen_size);
+                        $resolution = mysqli_real_escape_string($conn, $resolution);
+                        $matrix = mysqli_real_escape_string($conn, $matrix);
+                        $system = mysqli_real_escape_string($conn, $system);
+                        $ports = mysqli_real_escape_string($conn, $ports);
+                        $communication = mysqli_real_escape_string($conn, $communication);
+                        $multimedia = mysqli_real_escape_string($conn, $multimedia);
+                        $condition = mysqli_real_escape_string($conn, $condition);
+                        $working_hours = mysqli_real_escape_string($conn, $working_hours);
+                        $power_supply = mysqli_real_escape_string($conn, $power_supply);
+                        $price = mysqli_real_escape_string($conn, $price);
+                        $quantity = mysqli_real_escape_string($conn, $quantity);
+                        $description = mysqli_real_escape_string($conn, $description);
+                        
+                        $query = "UPDATE laptopy SET 
+                                    producent='$manufacturer', 
+                                    nazwa='$name', 
+                                    procesor='$processor', 
+                                    procesor_sz='$processor_size', 
+                                    ram='$ram', 
+                                    grafika='$graphics', 
+                                    dysk='$disk', 
+                                    klawiatura='$keyboard', 
+                                    przekatna='$screen_size', 
+                                    rozdzielczosc='$resolution', 
+                                    matryca='$matrix', 
+                                    system='$system', 
+                                    porty='$ports', 
+                                    komunikacja='$communication', 
+                                    multimedia='$multimedia', 
+                                    stan='$condition', 
+                                    czas_pracy='$working_hours', 
+                                    zasilacz='$power_supply', 
+                                    opis='$description', 
+                                    cena='$price', 
+                                    ilosc='$quantity' 
+                                WHERE id_laptopa=$id";
+                    
+                        if (mysqli_query($conn, $query)) {
+                            echo '<div class="message">Informacje o laptopie zostały zaktualizowane pomyślnie.</div>';
+                        } else {
+                            echo '<div class="message">Błąd aktualizacji informacji o laptopie: ' . mysqli_error($conn) . '</div>';
+                        }
+                    }
+// wyswietlenie danych z bazy
                     $query="
                     SELECT 
                     `producent`, 
@@ -188,82 +265,7 @@
                         $row=mysqli_fetch_assoc($result);
                     }
                 }
-                // Update record
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $manufacturer = htmlentities($_POST['manufacturer']);
-                    $name = htmlentities($_POST['name']);
-                    $processor = htmlentities($_POST['processor']);
-                    $processor_size = htmlentities($_POST['processor_size']);
-                    $ram = htmlentities($_POST['ram']);
-                    $graphics = htmlentities($_POST['graphics']);
-                    $disk = htmlentities($_POST['disk']);
-                    $keyboard = htmlentities($_POST['keyboard']);
-                    $screen_size = htmlentities($_POST['screen_size']);
-                    $resolution = htmlentities($_POST['resolution']);
-                    $matrix = htmlentities($_POST['matrix']);
-                    $system = htmlentities($_POST['system']);
-                    $ports = htmlentities($_POST['ports']);
-                    $communication = htmlentities($_POST['communication']);
-                    $multimedia = htmlentities($_POST['multimedia']);
-                    $condition = htmlentities($_POST['condition']);
-                    $working_hours = htmlentities($_POST['working_hours']);
-                    $power_supply = htmlentities($_POST['power_supply']);
-                    $price = htmlentities($_POST['price']);
-                    $quantity = htmlentities($_POST['quantity']);
-                    $description = htmlentities($_POST['description']);
                 
-                    $manufacturer = mysqli_real_escape_string($conn, $manufacturer);
-                    $name = mysqli_real_escape_string($conn, $name);
-                    $processor = mysqli_real_escape_string($conn, $processor);
-                    $processor_size = mysqli_real_escape_string($conn, $processor_size);
-                    $ram = mysqli_real_escape_string($conn, $ram);
-                    $graphics = mysqli_real_escape_string($conn, $graphics);
-                    $disk = mysqli_real_escape_string($conn, $disk);
-                    $keyboard = mysqli_real_escape_string($conn, $keyboard);
-                    $screen_size = mysqli_real_escape_string($conn, $screen_size);
-                    $resolution = mysqli_real_escape_string($conn, $resolution);
-                    $matrix = mysqli_real_escape_string($conn, $matrix);
-                    $system = mysqli_real_escape_string($conn, $system);
-                    $ports = mysqli_real_escape_string($conn, $ports);
-                    $communication = mysqli_real_escape_string($conn, $communication);
-                    $multimedia = mysqli_real_escape_string($conn, $multimedia);
-                    $condition = mysqli_real_escape_string($conn, $condition);
-                    $working_hours = mysqli_real_escape_string($conn, $working_hours);
-                    $power_supply = mysqli_real_escape_string($conn, $power_supply);
-                    $price = mysqli_real_escape_string($conn, $price);
-                    $quantity = mysqli_real_escape_string($conn, $quantity);
-                    $description = mysqli_real_escape_string($conn, $description);
-                    
-                    $query = "UPDATE laptopy SET 
-                                producent='$manufacturer', 
-                                nazwa='$name', 
-                                procesor='$processor', 
-                                procesor_sz='$processor_size', 
-                                ram='$ram', 
-                                grafika='$graphics', 
-                                dysk='$disk', 
-                                klawiatura='$keyboard', 
-                                przekatna='$screen_size', 
-                                rozdzielczosc='$resolution', 
-                                matryca='$matrix', 
-                                system='$system', 
-                                porty='$ports', 
-                                komunikacja='$communication', 
-                                multimedia='$multimedia', 
-                                stan='$condition', 
-                                czas_pracy='$working_hours', 
-                                zasilacz='$power_supply', 
-                                opis='$description', 
-                                cena='$price', 
-                                ilosc='$quantity' 
-                              WHERE id_laptopa=$id";
-                
-                if (mysqli_query($conn, $query)) {
-                    echo '<div class="message">Informacje o laptopie zostały zaktualizowane pomyślnie.</div>';
-                } else {
-                    echo '<div class="message">Błąd aktualizacji informacji o laptopie: ' . mysqli_error($conn) . '</div>';
-                }
-            }
             ?>
                 <!-- FORMULARZ -->
                 <form  name="edit_laptop" method="post">
