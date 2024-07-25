@@ -14,7 +14,7 @@
         // Redirect to manage_announcements.php after 3 seconds
         echo '<script>
             setTimeout(function() {
-                window.location.href = "manage_announcements.php?id=' . $id . '";
+                window.location.href = "manage_announcements.php";
             }, 3000);
         </script>';
     } else {
