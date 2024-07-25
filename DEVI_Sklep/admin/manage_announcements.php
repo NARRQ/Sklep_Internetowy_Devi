@@ -79,6 +79,13 @@
             padding: 5px 10px;
         }
     </style>
+    <script>
+        function confirmDelete(url) {
+            if (confirm("Czy na pewno chcesz usunąć to ogłoszenie?")) {
+                window.location.href = url;
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- NAGLOWEK -->
@@ -103,7 +110,7 @@
                     echo "<img src='" . $row["miniatura"] . "' alt='" . $row["nazwa"] . "'>";
                     echo "<h3>" . $row["nazwa"] . "</h3>";
                     echo "<button onclick=\"location.href='manage_announcements_edit.php?id=" . $row["id_laptopa"] . "'\">Edytuj</button>";
-                    echo "<button onclick=\"location.href='manage_announcements_delete.php?id=" . $row["id_laptopa"] . "'\">Usuń</button>";
+                    echo "<button onclick=\"confirmDelete(location.href='manage_announcements_delete.php?id=" . $row["id_laptopa"] . "')\">Usuń</button>";
                     echo "</div>";
                 }
             } else {
