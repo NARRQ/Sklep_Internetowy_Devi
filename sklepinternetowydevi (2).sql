@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Lip 23, 2024 at 12:39 PM
+-- Generation Time: Lip 25, 2024 at 05:15 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -155,10 +155,13 @@ CREATE TABLE `laptopy` (
 --
 
 INSERT INTO `laptopy` (`id_laptopa`, `producent`, `nazwa`, `procesor`, `procesor_sz`, `ram`, `grafika`, `dysk`, `klawiatura`, `przekatna`, `rozdzielczosc`, `matryca`, `system`, `porty`, `komunikacja`, `multimedia`, `stan`, `czas_pracy`, `zasilacz`, `opis`, `cena`, `ilosc`, `miniatura`, `miniatura_nazwa`, `czy_na_stronie`) VALUES
-(1, 'HP', 'HP ProBook 450 G6', 'Intel Core i5', '8565U', '8 GB (DDR4, 2400 MHz)', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080 (Full HD', 'matowa', 'Microsoft Windows 11 Pro', 'USB 2.0 - 1 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nUSB Typu-C (z DisplayPort) - 1 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, mikrofon, głośnik', 'Laptop poleasingowy, stan bardzo dobry', '8 godzin', 'Tak', '15-calowy HP ProBook 450 G6 to świetna propozycja dla biznesmenów; przestronny ekran, numeryczna klawiatura, a przede wszystkim zaawansowane funkcje zabezpieczeń, dzięki którym przechowywane na urządzeniu dane pozostaną bezpiecznie. ', 1699.00, 4, 'uploads/g6.png', 'g6.png', 1),
-(2, 'HP ', 'HP ProBook 450 G3', 'Intel Core i5', '6200U', '16 GB DDR4', 'Intel HD Graphics 520', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 10 Pro', 'USB 2.0 - 2 szt.\r\nUSB 3.2 Gen. 1 - 2 szt.\r\nHDMI - 1 szt.\r\nCzytnik kart pamięci SD - 1 szt.\r\nVGA (D-sub) - 1 szt.\r\nRJ-45 (LAN) - 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe - 1 szt.\r\nDC-in (wejście zasilania) - 1 szt.', 'Wi-Fi, Bluetooth, Ethernet', 'Kamera, głośnik, mikrofon', 'Laptop poleasingowy, stan bardzo dobry', 'Do 8 godzin', 'Tak', 'HP ProBook 450 G3 to laptop, który oferuje solidną wydajność w połączeniu z wyrazistym wyglądem. Z procesorem Intel i5 6. generacji 6200U, 8 GB RAM i szybkim dyskiem o pojemności 500 GB, ten model spełnia oczekiwania użytkowników biznesowych.', 1599.00, 4, 'uploads/hp_g31.png', 'hp_g31.png', 1),
-(3, 'Dell', 'Dell Latitude 5490', 'Intel core i5', '7200U', '16 GB DDR4', 'Grafika zintegrowana, Intel HD 620', '256 GB', 'qwert', 14.10, '1920×1080', 'matowa', 'Windows 10 Home', 'USB 3.2 Gen. 1 – 3 szt.\r\nUSB Typu-C – 1 szt.\r\nHDMI – 1 szt.\r\nCzytnik kart pamięci SD – 1 szt.\r\nVGA (D-sub) – 1 szt.\r\nRJ-45 (LAN) – 1 szt.\r\nWyjście słuchawkowe/wejście mikrofonowe – 1 szt.\r\nCzytnik Smart Card – 1 szt.\r\nDC-in (wejście zasilania) – 1 szt.', 'Wi-Fi', 'Czytnik kart pamięci, Głośniki', '100 % sprawny', '8 godzin', 'Tak', 'Lekka i smukła konstrukcja ułatwia transport laptopa.\r\nDługi czas pracy baterii pozwala na pracę przez cały dzień bez konieczności ładowania.\r\nPodświetlana klawiatura umożliwia komfortowe pisanie w ciemnych pomieszczeniach.', 1899.00, 5, 'uploads/dell.png', 'dell.png', 1),
-(4, 'MacBook', 'MacBook Air 13 A1932', 'Intel Core i5', '8210Y', '8 GB', 'Intel UHD Graphics 617', '256 GB', 'Butterfly (motylkowa)', 13.30, '2560 x 1600', 'Retina ', 'Oryginalny system operacyjny MacOS', 'USB 3.1 typ C, Thunderbolt, minijack 3,5 mm (audio)', 'Wi-Fi, Bluetooth', 'głośniki, kamera, mikrofon', '100 % sprawny', '8 godzin', 'Tak', 'Najpopular­niejszy Mac  zawróci Ci w głowie. Nowy MacBook Air jest smuklejszy, lżejszy i ma olśniewający wyświetlacz Retina, Touch ID, klawiaturę najnowszej generacji oraz gładzik Force Touch. Jego legendarna konstrukcja w kształcie klina jest wykonana z aluminium pochodzącego w 100 procentach z recyklingu, co czyni go najbardziej ekologicznym ze wszystkich Maców. Krótko mówiąc, MacBook Air to doskonały ultraprzenośny notebook do wszystkiego.', 1699.00, 6, 'uploads/mac1.webp', 'mac1.webp', 1);
+(5, 'HP', 'HP Probook 450 G6', 'Intel Core i5', '6200U', '16 GB', 'Intel UHD Graphics 620', '256 GB', 'qwert', 13.30, '1920 x 1080', 'matowa', 'Windows 11 pro', 'USB 2.0 - 1 szt. USB 3.2 Gen. 1 - 2 szt. USB Typu-C (z DisplayPort) - 1 szt. HDMI - 1 szt. Czytnik kart pamięci SD - 1 szt. RJ-45 (LAN) - 1 szt. Wyjście słuchawkowe/wejście mikrofonowe - 1 szt. DC-in (wejście zasilania) - 1 szt.', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'ok. 2,5 godziny, zazwyczaj dłużej', 'Tak', 'Laptop poleasingowy', 1799.00, 4, 'uploads/hp_g6.png', 'hp_g6.png', 0),
+(8, 'HP', 'HP Probook 450 G6', 'Intel Core i5', '6200U', '16 GB', 'Intel UHD Graphics 620', '256 GB', 'qwert', 13.30, '1920 x 1080', 'matowa', 'Windows 11 pro', 'USB 2.0 - 1 szt. USB 3.2 Gen. 1 - 2 szt. USB Typu-C (z DisplayPort) - 1 szt. HDMI - 1 szt. Czytnik kart pamięci SD - 1 szt. RJ-45 (LAN) - 1 szt. Wyjście słuchawkowe/wejście mikrofonowe - 1 szt. DC-in (wejście zasilania) - 1 szt.', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'ok. 2,5 godziny, zazwyczaj dłużej', 'Tak', 'Laptop poleasingowy', 1799.00, 4, 'uploads/hp_g6.png', 'hp_g6.png', 0),
+(10, 'MacBook', 'MacBook Air 13 A1932', 'Intel Core i5', '8210Y', '8 GB', 'Intel UHD Graphics 617', '256 GB', 'Butterfly(motylkowa)', 13.30, '2560 x 1600', 'Retina', 'Oryginalny system operacyjny MacOS', 'USB 3.1 typ C, Thunderbolt, minijack 3,5 mm (audio)', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'do 8 godzin', 'Tak', 'Laptop poleasingowy...', 1899.00, 4, 'uploads/mac.png', 'mac.png', 0),
+(11, 'Dell', 'Dell Latitude 5490', 'Intel Core i5', '6200U', '8 GB', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 11 pro', 'USB 2.0 - 1 szt. USB 3.2 Gen. 1 - 2 szt. USB Typu-C (z DisplayPort) - 1 szt. HDMI - 1 szt. Czytnik kart pamięci SD - 1 szt. RJ-45 (LAN) - 1 szt. Wyjście słuchawkowe/wejście mikrofonowe - 1 szt. DC-in (wejście zasilania) - 1 szt.', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'do 8 godzin', 'Tak', 'Laptop poleasingowy', 1699.00, 7, 'uploads/dell.png', 'dell.png', 0),
+(13, 'Dell', 'Dell Latitude 5490', 'Intel Core i5', '6200U', '8 GB', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 11 pro', 'USB 2.0 - 1 szt. USB 3.2 Gen. 1 - 2 szt. USB Typu-C (z DisplayPort) - 1 szt. HDMI - 1 szt. Czytnik kart pamięci SD - 1 szt. RJ-45 (LAN) - 1 szt. Wyjście słuchawkowe/wejście mikrofonowe - 1 szt. DC-in (wejście zasilania) - 1 szt.', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'do 8 godzin', 'Tak', 'Laptop poleasingowy', 1699.00, 7, 'uploads/dell.png', 'dell.png', 0),
+(33, 'HP', 'HP Probook 450 G6', 'Intel Core 5', '6200U', '8 GB', 'Intel UHD Graphics 617', '256 GB', 'qwert', 13.30, '1920 x 1080', 'matowa', 'Windows 11 pro', '1 x USB 2.0,  2 x USB 3.0', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'do 8 godzin', 'Tak', 'dskd', 1000.00, 5, 'uploads/g6 hp.jpg', 'g6 hp.jpg', 1),
+(34, 'Dell', 'Dell Latitude 5490', 'Intel Core i5', '6200U', '8 GB', 'Intel UHD Graphics 620', '256 GB', 'qwert', 15.60, '1920 x 1080', 'matowa', 'Windows 11 pro', '1 x USB 2.0,  2 x USB 3.0', 'Wi-Fi,Bluetooth', 'kamera, mikrofon, głośniki', 'bardzo dobry', 'do 8 godzin', 'Tak', 'Dell ....', 1000.00, 6, 'uploads/dell.png', 'dell.png', 1);
 
 -- --------------------------------------------------------
 
@@ -172,17 +175,6 @@ CREATE TABLE `lap_zamowienia` (
   `ilosc` int(11) UNSIGNED NOT NULL,
   `cena_razem` decimal(10,2) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lap_zamowienia`
---
-
-INSERT INTO `lap_zamowienia` (`id_zamowienia`, `id_laptopa`, `ilosc`, `cena_razem`) VALUES
-(1, 1, 1, 1699.00),
-(2, 4, 1, 1699.00),
-(3, 3, 1, 1899.00),
-(4, 1, 1, 1111.00),
-(1, 2, 1, 299.00);
 
 -- --------------------------------------------------------
 
@@ -228,8 +220,23 @@ CREATE TABLE `zdjecia` (
 --
 
 INSERT INTO `zdjecia` (`id_zdjecia`, `id_laptopa`, `sciezka`, `nazwa`) VALUES
-(1, 3, 'uploads/dell.png', 'dell.png'),
-(2, 4, 'uploads/g66.jpg', 'g66.jpg');
+(3, 5, 'uploads/g66.jpg', 'g66.jpg'),
+(4, 5, 'uploads/g666.png', 'g666.png'),
+(9, 8, 'uploads/g66.jpg', 'g66.jpg'),
+(10, 8, 'uploads/g666.png', 'g666.png'),
+(13, 10, 'uploads/mac2.png', 'mac2.png'),
+(14, 10, 'uploads/mac3.png', 'mac3.png'),
+(15, 11, 'uploads/dell.png', 'dell.png'),
+(16, 11, 'uploads/dell1.png', 'dell1.png'),
+(17, 11, 'uploads/dell2.png', 'dell2.png'),
+(21, 13, 'uploads/dell.png', 'dell.png'),
+(22, 13, 'uploads/dell1.png', 'dell1.png'),
+(23, 13, 'uploads/dell2.png', 'dell2.png'),
+(60, 33, 'uploads/g6.png', 'g6.png'),
+(61, 33, 'uploads/g66.jpg', 'g66.jpg'),
+(62, 33, 'uploads/g666.png', 'g666.png'),
+(63, 34, 'uploads/dell1.png', 'dell1.png'),
+(64, 34, 'uploads/dell2.png', 'dell2.png');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -319,7 +326,7 @@ ALTER TABLE `klienci`
 -- AUTO_INCREMENT for table `laptopy`
 --
 ALTER TABLE `laptopy`
-  MODIFY `id_laptopa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_laptopa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `zamowienia`
@@ -331,7 +338,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `zdjecia`
 --
 ALTER TABLE `zdjecia`
-  MODIFY `id_zdjecia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_zdjecia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- Constraints for dumped tables
