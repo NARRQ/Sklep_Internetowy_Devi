@@ -57,35 +57,44 @@
             margin-bottom: 20px;
             border-radius: 4px;
         }
-        .laptop-container {
+        form {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 0 auto;
+            flex-direction: column;
         }
-        .laptop {
-            margin: 10px;
+        form div {
+            margin-bottom: 15px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="file"],
+        form textarea {
+            width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
-            text-align: center;
-            width: 200px;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        .laptop img {
-            max-width: 100%;
+        form textarea {
+            resize: vertical;
+            height: 500px;
+        }
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-preview-container img {
+            max-width: 100px;
             height: auto;
-        }
-        .laptop button {
-            margin-top: 5px;
-            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
     </style>
-    <script>
-        function confirmDelete(url) {
-            if (confirm("Czy na pewno chcesz usunąć to ogłoszenie?")) {
-                window.location.href = url;
-            }
-        }
-    </script>
 </head>
 <body>
     <!-- NAGLOWEK -->
@@ -94,30 +103,6 @@
     <div class="login-container">
         <h1>Panel Administratora  - Zarządzaj ogłoszeniami</h1>
         <button><a href="admin_page.php">Panel Administratora</a></button>
-        <!-- LOGIKA POLACZENIA -->
-        <?php
-            require('../baza/config.php');
-            // wyswietlenie danych z bazy
-            $query = "SELECT id_laptopa,nazwa,miniatura FROM laptopy";
-            
-            $result = mysqli_query($conn,$query);
-            ?>
-        <div class="laptop-container">
-            <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<div class='laptop'>";
-                    echo "<img src='" . $row["miniatura"] . "' alt='" . $row["nazwa"] . "'>";
-                    echo "<h3>" . $row["nazwa"] . "</h3>";
-                    echo "<button onclick=\"location.href='manage_announcements_edit.php?id=" . $row["id_laptopa"] . "'\">Edytuj</button>";
-                    echo "<button onclick=\"confirmDelete(location.href='manage_announcements_delete.php?id=" . $row["id_laptopa"] . "')\">Usuń</button>";
-                    echo "</div>";
-                }
-            } else {
-                echo "0 results";
-            }
-            ?>
-        </div>
     </div>
     </main>
     <!-- STOPKA -->

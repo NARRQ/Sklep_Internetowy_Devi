@@ -42,7 +42,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && isset($_GET['action'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktualizacja zamówienia</title>
+    <title>Document</title>
     <style>
         .message {
             background-color: #28a745;
