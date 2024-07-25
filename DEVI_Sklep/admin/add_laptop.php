@@ -29,35 +29,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ilosc = mysqli_real_escape_string($conn, $_POST['quantity']);
 
     // Obsługa przesyłania plików
-    $main_image_path = '';
-    $additional_images_paths = [];
 
-    // Przesyłanie miniatury
-    if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] == 0) {
-        $main_image_path = 'uploads/' . basename($_FILES['main_image']['name']);
-        move_uploaded_file($_FILES['main_image']['tmp_name'], $main_image_path);
+$main_image_path = '';
+$additional_images_paths = [];
+
+$main_image_path1 = '';
+$additional_images_paths1 = [];
+
+// Ścieżki docelowe
+$upload_dir1 = 'uploads/';
+$upload_dir2 = '../wyswietlanie_ogloszen/uploads/';
+
+// Funkcja do przesyłania pliku do dwóch lokalizacji
+function uploadFileToBothLocations($file, $upload_dir1, $upload_dir2) {
+    $filename = basename($file['name']);
+    $path1 = $upload_dir1 . $filename;
+    $path2 = $upload_dir2 . $filename;
+    if (move_uploaded_file($file['tmp_name'], $path1)) {
+        if (copy($path1, $path2)) {
+            return [$path1, $path2];
+        }
     }
+    return false;
+}
 
-    // Przesyłanie dodatkowych zdjęć
-    if (isset($_FILES['images'])) {
-        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-            if ($_FILES['images']['error'][$key] == 0) {
-                $path = 'uploads/' . basename($_FILES['images']['name'][$key]);
-                move_uploaded_file($tmp_name, $path);
-                $additional_images_paths[] = $path;
+// Przesyłanie miniatury
+if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] == 0) {
+    $result = uploadFileToBothLocations($_FILES['main_image'], $upload_dir1, $upload_dir2);
+    if ($result) {
+        $main_image_path = $result[0];
+        $main_image_path1 = $result[1];
+    } else {
+        echo "Błąd podczas przesyłania miniatury.";
+    }
+}
+
+// Przesyłanie dodatkowych zdjęć
+if (isset($_FILES['images'])) {
+    foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+        if ($_FILES['images']['error'][$key] == 0) {
+            $file = [
+                'name' => $_FILES['images']['name'][$key],
+                'tmp_name' => $tmp_name
+            ];
+            $result = uploadFileToBothLocations($file, $upload_dir1, $upload_dir2);
+            if ($result) {
+                $additional_images_paths[] = $result[0];
+                $additional_images_paths1[] = $result[1];
+            } else {
+                echo "Błąd podczas przesyłania dodatkowego zdjęcia.";
             }
         }
     }
-
+}
     // Przygotowanie zapytania SQL do tabeli 'laptopy'
     $query = "INSERT INTO laptopy (
                 nazwa, producent, procesor, ram, dysk, procesor_sz, grafika, klawiatura,
                 przekatna, rozdzielczosc, matryca, system, porty, komunikacja, multimedia, stan,
-                czas_pracy, zasilacz, opis, cena, ilosc, miniatura, miniatura_nazwa
+                czas_pracy, zasilacz, opis, cena, ilosc, miniatura, miniatura_nazwa,czy_na_stronie
               ) VALUES (
                 '$nazwa', '$producent', '$procesor', '$ram', '$dysk', '$procesor_sz', '$grafika', '$klawiatura',
                 '$przekatna', '$rozdzielczosc', '$matryca', '$system', '$porty', '$komunikacja', '$multimedia', '$stan',
-                '$czas_pracy', '$zasilacz', '$opis', '$cena', '$ilosc', '$main_image_path', '" . basename($main_image_path) . "'
+                '$czas_pracy', '$zasilacz', '$opis', '$cena', '$ilosc', '$main_image_path', '" . basename($main_image_path) . "',1
               )";
 
     // Wykonanie zapytania SQL do tabeli 'laptopy'
@@ -273,7 +306,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div>
                     <label for="screen_size">Przekątna ekranu:</label>
-                    <input type="text" id="screen_size" name="screen_size" required>
+                    <input type="number" id="screen_size" name="screen_size" min="1"step="0.1" required>
                 </div>
                 <div>
                     <label for="resolution">Rozdzielczość:</label>
@@ -313,7 +346,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div>
                     <label for="price">Cena:</label>
-                    <input type="number" id="price" name="price" required>
+                    <input type="number" id="price" name="price" min="0" step="0.01" required>
                 </div>
                 <div>
                     <label for="quantity">Ilość na stanie:</label>

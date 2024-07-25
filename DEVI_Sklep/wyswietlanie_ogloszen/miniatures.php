@@ -35,7 +35,7 @@
             top: 20px; /* Ustawienie od górnej krawędzi */
             bottom: 20px; /* Dodaje margines na stopkę */
             max-height: calc(100vh - 40px);
-            height: auto
+            height: auto;
             overflow-y: auto;
             margin-left:0;
         }
@@ -287,6 +287,48 @@
         .specification p {
             margin: 10px 0;
         }
+
+        /* Styl dla sekcji sortowania */
+        .sort-section {
+            position: absolute; 
+            top: 145px; /* Odstęp od górnej krawędzi*/
+            right: 20px; 
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 10; 
+            width: 160px; /* Szerokość sekcji sortowania */
+        }
+
+        .sort-section label {
+            font-size: 13px;
+            margin-left: 10px;
+            text-align: center;
+           
+            
+            
+           
+        }
+
+        .sort-section select {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            
+        }
+        
+
+
+
+        
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -300,6 +342,10 @@
             <span class="arrow prev">&#10094;</span>
             <img id="modal-image" src="" alt="Zdjęcie produktu">
             <span class="arrow next">&#10095;</span>
+            <div class="thumbnail-container">
+                  <!-- Miniaturki zdjęć -->
+            <div id="modal-thumbnails"></div>
+        </div>
             <div class="header">
                 <h2 id="modal-title"></h2>
                 <div class="mini-info">
@@ -330,6 +376,10 @@
         </div>
     </div>
 
+
+
+
+
     <!-- Treść główna -->
     <main>
         <div class="container">
@@ -358,36 +408,60 @@
                 
                 <button type="button" id="applyFilters">Zastosuj filtry</button>
             </div>
+            <!-- Sekcja sortowania -->
+            <div class="sort-section">
+                <label for="sort">Sortuj według:</label>
+                <select id="sort">
+                    <option value="price-asc">Cena rosnąco</option>
+                    <option value="price-desc">Cena malejąco</option>
+                </select>
+            </div>
+             
 
             <!-- Ogłoszenia -->
             <div id="announcementContainer" class="announcement-container">
                 <!-- Wyświetlanie ogłoszeń -->
                 <?php
-                require('../baza/config.php');
-             
-
-               
                 
 
+                require('../baza/config.php');
 
-                // Pobierz wartości filtrów z GET
-                $brand = isset($_GET['brand']) ? $_GET['brand'] : '';
+                // Pobierz wartości filtrów i sortowania z GET
+                $brand = isset($_GET['brand']) ? mysqli_real_escape_string($conn, $_GET['brand']) : '';
                 $screenSizeFrom = isset($_GET['screenSizeFrom']) ? intval($_GET['screenSizeFrom']) : 0;
                 $screenSizeTo = isset($_GET['screenSizeTo']) ? intval($_GET['screenSizeTo']) : PHP_INT_MAX;
                 $priceFrom = isset($_GET['priceFrom']) ? floatval($_GET['priceFrom']) : 0;
                 $priceTo = isset($_GET['priceTo']) ? floatval($_GET['priceTo']) : PHP_FLOAT_MAX;
+                $sort = isset($_GET['sort']) ? $_GET['sort'] : ''; // Domyślnie brak sortowania
 
-                // Przygotuj zapytanie SQL z filtrami
+                // Ustawienie domyślnego porządku sortowania na rosnąco, tylko jeśli sortowanie jest wybrane
+                $sortOrder = '';
+                if ($sort === 'price-desc') {
+                    $sortOrder = 'ORDER BY l.cena DESC';
+                } elseif ($sort === 'price-asc') {
+                    $sortOrder = 'ORDER BY l.cena ASC';
+                }
+
+                // Przygotowanie zapytania SQL z filtrami
+                // Przygotowanie zapytania SQL z filtrami
                 $query = "
-                    SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
-                    FROM laptopy l
-                    LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
-                    WHERE l.producent LIKE '%$brand%'
-                    AND l.przekatna BETWEEN $screenSizeFrom AND $screenSizeTo
-                    AND l.cena BETWEEN $priceFrom AND $priceTo
-                    GROUP BY l.id_laptopa
+                SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
+                FROM laptopy l
+                LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
+                WHERE l.producent LIKE '%$brand%'
+                AND l.przekatna BETWEEN $screenSizeFrom AND $screenSizeTo
+                AND l.cena BETWEEN $priceFrom AND $priceTo
+                GROUP BY l.id_laptopa
+                $sortOrder
                 ";
 
+
+
+                
+
+                
+
+                // Wykonanie zapytania SQL
                 $announcements = mysqli_query($conn, $query);
 
                 if ($announcements && mysqli_num_rows($announcements) > 0) {
@@ -442,6 +516,60 @@
     <!-- STOPKA -->
     <?php include '../footer.php'; ?>
     <script>
+       document.addEventListener('DOMContentLoaded', function() {
+            const sortSelect = document.getElementById('sort');
+            const filterButton = document.getElementById('applyFilters');
+            const brandSelect = document.getElementById('brand');
+            const screenSizeFromInput = document.getElementById('screenSizeFrom');
+            const screenSizeToInput = document.getElementById('screenSizeTo');
+            const priceFromInput = document.getElementById('priceFrom');
+            const priceToInput = document.getElementById('priceTo');
+
+            // Funkcja do aktualizacji URL na podstawie parametrów
+            function updateURL() {
+                const queryParams = new URLSearchParams(window.location.search);
+
+                // Dodaj filtry
+                if (brandSelect.value) queryParams.set('brand', brandSelect.value);
+                else queryParams.delete('brand');
+                
+                if (screenSizeFromInput.value) queryParams.set('screenSizeFrom', screenSizeFromInput.value);
+                else queryParams.delete('screenSizeFrom');
+                
+                if (screenSizeToInput.value) queryParams.set('screenSizeTo', screenSizeToInput.value);
+                else queryParams.delete('screenSizeTo');
+                
+                if (priceFromInput.value) queryParams.set('priceFrom', priceFromInput.value);
+                else queryParams.delete('priceFrom');
+                
+                if (priceToInput.value) queryParams.set('priceTo', priceToInput.value);
+                else queryParams.delete('priceTo');
+
+                // Dodaj sortowanie
+                if (sortSelect.value) queryParams.set('sort', sortSelect.value);
+                else queryParams.delete('sort');
+
+                // Przekierowanie do URL z nowymi parametrami
+                window.location.search = queryParams.toString();
+            }
+
+            filterButton.addEventListener('click', updateURL);
+            sortSelect.addEventListener('change', updateURL);
+
+            // Załaduj parametry z URL i ustaw je 
+            function loadParametersFromURL() {
+                const queryParams = new URLSearchParams(window.location.search);
+
+                if (queryParams.has('brand')) brandSelect.value = queryParams.get('brand');
+                if (queryParams.has('screenSizeFrom')) screenSizeFromInput.value = queryParams.get('screenSizeFrom');
+                if (queryParams.has('screenSizeTo')) screenSizeToInput.value = queryParams.get('screenSizeTo');
+                if (queryParams.has('priceFrom')) priceFromInput.value = queryParams.get('priceFrom');
+                if (queryParams.has('priceTo')) priceToInput.value = queryParams.get('priceTo');
+                if (queryParams.has('sort')) sortSelect.value = queryParams.get('sort');
+            }
+
+            loadParametersFromURL();
+        });
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById("announcementModal");
             const modalImg = document.getElementById("modal-image");
@@ -463,7 +591,7 @@
 
             const openModal = (announcement) => {
                 const images = announcement.dataset.zdjecia.split(',');
-                currentIndex = 0; // Ustawienie początkowego indeksu na pierwszy obraz
+                currentIndex = 0; 
                 modalImg.src = images[currentIndex];
                 modalTitle.textContent = announcement.dataset.nazwa;
                 modalPrice.textContent = `${announcement.dataset.cena}`;
@@ -546,41 +674,26 @@
                 const screenSizeTo = document.getElementById('screenSizeTo').value || '';
                 const priceFrom = document.getElementById('priceFrom').value || '';
                 const priceTo = document.getElementById('priceTo').value || '';
+                const sort = document.getElementById('sort').value || '';
 
-                // Initialize an empty array to hold the query parameters
                 let queryParams = [];
 
-                // Add parameters to the query string if they are not empty
                 if (brand) queryParams.push(`brand=${encodeURIComponent(brand)}`);
                 if (screenSizeFrom) queryParams.push(`screenSizeFrom=${encodeURIComponent(screenSizeFrom)}`);
                 if (screenSizeTo) queryParams.push(`screenSizeTo=${encodeURIComponent(screenSizeTo)}`);
                 if (priceFrom) queryParams.push(`priceFrom=${encodeURIComponent(priceFrom)}`);
                 if (priceTo) queryParams.push(`priceTo=${encodeURIComponent(priceTo)}`);
+                if (sort) queryParams.push(`sort=${encodeURIComponent(sort)}`);
 
-                // Join all parameters with '&' and prepend with '?'
                 let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
-                // Debugging output
-                console.log(`Redirecting to: miniatures.php${queryString}`);
-
-                // Redirect with query parameters
-                window.location.href = `miniatures.php${queryString}`;  
+                window.location.href = `miniatures.php${queryString}`;
             });
-
-
-            
-            
-
-
-
-            
-
-
-
-
-
             
         });
+
+
+
     </script>
 </body>
 </html>
