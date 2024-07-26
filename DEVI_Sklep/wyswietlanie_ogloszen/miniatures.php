@@ -505,6 +505,60 @@
     <?php include '../footer.php'; ?>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortSelect = document.getElementById('sort');
+            const filterButton = document.getElementById('applyFilters');
+            const brandSelect = document.getElementById('brand');
+            const screenSizeFromInput = document.getElementById('screenSizeFrom');
+            const screenSizeToInput = document.getElementById('screenSizeTo');
+            const priceFromInput = document.getElementById('priceFrom');
+            const priceToInput = document.getElementById('priceTo');
+
+            // Funkcja do aktualizacji URL na podstawie parametrów
+            function updateURL() {
+                const queryParams = new URLSearchParams(window.location.search);
+
+                // Dodaj filtry
+                if (brandSelect.value) queryParams.set('brand', brandSelect.value);
+                else queryParams.delete('brand');
+                
+                if (screenSizeFromInput.value) queryParams.set('screenSizeFrom', screenSizeFromInput.value);
+                else queryParams.delete('screenSizeFrom');
+                
+                if (screenSizeToInput.value) queryParams.set('screenSizeTo', screenSizeToInput.value);
+                else queryParams.delete('screenSizeTo');
+                
+                if (priceFromInput.value) queryParams.set('priceFrom', priceFromInput.value);
+                else queryParams.delete('priceFrom');
+                
+                if (priceToInput.value) queryParams.set('priceTo', priceToInput.value);
+                else queryParams.delete('priceTo');
+
+                // Dodaj sortowanie
+                if (sortSelect.value) queryParams.set('sort', sortSelect.value);
+                else queryParams.delete('sort');
+
+                // Przekierowanie do URL z nowymi parametrami
+                window.location.search = queryParams.toString();
+            }
+
+            filterButton.addEventListener('click', updateURL);
+            sortSelect.addEventListener('change', updateURL);
+
+            // Załaduj parametry z URL i ustaw je 
+            function loadParametersFromURL() {
+                const queryParams = new URLSearchParams(window.location.search);
+
+                if (queryParams.has('brand')) brandSelect.value = queryParams.get('brand');
+                if (queryParams.has('screenSizeFrom')) screenSizeFromInput.value = queryParams.get('screenSizeFrom');
+                if (queryParams.has('screenSizeTo')) screenSizeToInput.value = queryParams.get('screenSizeTo');
+                if (queryParams.has('priceFrom')) priceFromInput.value = queryParams.get('priceFrom');
+                if (queryParams.has('priceTo')) priceToInput.value = queryParams.get('priceTo');
+                if (queryParams.has('sort')) sortSelect.value = queryParams.get('sort');
+            }
+
+            loadParametersFromURL();
+        });
          document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById("announcementModal");
     const modalImg = document.getElementById("modal-image");
@@ -614,6 +668,7 @@
         const screenSizeTo = document.getElementById('screenSizeTo').value || '';
         const priceFrom = document.getElementById('priceFrom').value || '';
         const priceTo = document.getElementById('priceTo').value || '';
+        const sort = document.getElementById('sort').value || '';
 
         // Initialize an empty array to hold the query parameters
         let queryParams = [];
@@ -623,6 +678,7 @@
                 if (screenSizeTo) queryParams.push(`screenSizeTo=${encodeURIComponent(screenSizeTo)}`);
                 if (priceFrom) queryParams.push(`priceFrom=${encodeURIComponent(priceFrom)}`);
                 if (priceTo) queryParams.push(`priceTo=${encodeURIComponent(priceTo)}`);
+                if (sort) queryParams.push(`sort=${encodeURIComponent(sort)}`);
                 // Join all parameters with '&' and prepend with '?'
                 let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
