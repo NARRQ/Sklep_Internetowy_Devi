@@ -113,7 +113,7 @@
     <main>
     <div class="login-container">
     <h1>Panel Administratora  - Zarządzaj zamówieniem</h1>
-    <button><a href="admin_page.php">Panel Administratora</a></button>
+    <button><a href="../admin_page.php">Panel Administratora</a></button>
     <button><a href="manage_orders.php">Lista zamówień</a></button>
     <!-- LOGIKA -->
     <?php
