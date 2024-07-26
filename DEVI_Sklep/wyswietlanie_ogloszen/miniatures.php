@@ -502,7 +502,7 @@
     </main>
 
     <!-- Stopka -->
-    <?php include 'footer_ogloszenia.php'; ?>
+    <?php include '../footer.php'; ?>
 
     <script>
          document.addEventListener('DOMContentLoaded', function() {
