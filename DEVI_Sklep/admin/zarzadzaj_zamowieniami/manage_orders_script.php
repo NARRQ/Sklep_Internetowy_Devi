@@ -1,5 +1,8 @@
 <?php
-require('../baza/config.php');
+include_once('../auth_check.php');
+?>
+<?php
+require('../../baza/config.php');
 
 if (isset($_GET['id']) && is_numeric($_GET['id']) && isset($_GET['action'])) {
     $id = $_GET['id'];
@@ -14,7 +17,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && isset($_GET['action'])) {
             $query = "UPDATE zamowienia SET status='Zakończony' WHERE id_zamowienia=$id";
             break;
         case 'usun':
-            $query = "DELETE FROM zamowienia WHERE id_zamowienia=$id";
+            $query = "UPDATE zamowienia SET status='Usuniete' WHERE id_zamowienia=$id";
             break;
         default:
             echo "Nieznana akcja";
