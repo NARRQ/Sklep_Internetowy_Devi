@@ -1,4 +1,7 @@
 <?php
+include_once('../auth_check.php');
+?>
+<?php
 require('../../baza/config.php');
 $message = '';
 

@@ -1,4 +1,7 @@
 <?php
+include_once('../auth_check.php');
+?>
+<?php
     require('../../baza/config.php');
     
     if (isset($_GET['id'])&& is_numeric($_GET['id'])) {
