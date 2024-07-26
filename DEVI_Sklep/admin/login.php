@@ -14,13 +14,6 @@
     <main>
         <div id="login" class="login-container">
             <form action="login-script.php" method="post">
-            <!-- <h1>
-                LOGOWANIE
-            </h1>
-                Login<input type="text" name='login'><br>
-                Haslo<input type="password" name='haslo'><br>
-                <input type="submit" value="Zaloguj">
-            -->
                 <!-- group: Logowanie content -->
                 <h1>Panel administratora - Logowanie</h1>
                 <!-- Pola do wpisania -->
