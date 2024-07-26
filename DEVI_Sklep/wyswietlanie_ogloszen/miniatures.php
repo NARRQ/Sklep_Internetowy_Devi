@@ -449,6 +449,7 @@
                 FROM laptopy l
                 LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
                 WHERE l.producent LIKE '%$brand%'
+                AND l.czy_na_stronie=1
                 AND l.przekatna BETWEEN $screenSizeFrom AND $screenSizeTo
                 AND l.cena BETWEEN $priceFrom AND $priceTo
                 GROUP BY l.id_laptopa

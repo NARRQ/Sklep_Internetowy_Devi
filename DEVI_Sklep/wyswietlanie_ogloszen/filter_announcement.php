@@ -27,7 +27,7 @@ $priceTo = isset($_GET['priceTo']) ? floatval($_GET['priceTo']) : PHP_FLOAT_MAX;
 $query = "SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
           FROM laptopy l
           LEFT JOIN zdjecia z ON l.id_laptopa = z.id_laptopa
-          WHERE 1=1";
+          WHERE l.czy_na_stronie=1";
 
 $params = [];
 $types = '';
