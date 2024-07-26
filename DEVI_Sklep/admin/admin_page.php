@@ -103,13 +103,13 @@
     <div class="login-container">
         <h1>Panel Administratora</h1>
         <div>
-            <button><a href="add_announcement.php">Dodaj <br> ogłoszenie</a></button>
-            <button><a href="manage_announcements.php">Zarządzaj <br> ogłoszeniami</a></button>
+            <button><a href="dodaj_ogloszenie/add_announcement.php">Dodaj <br> ogłoszenie</a></button>
+            <button><a href="zarzadzaj_ogloszeniami/manage_announcements.php">Zarządzaj <br> ogłoszeniami</a></button>
         </div>
         <br>
         <div>
-            <button><a href="manage_orders.php">Zarządzaj <br> zamówieniami</a></button>
-            <button><a href="edit_information.php">Edytuj  <br>informacje</a></button>
+            <button><a href="zarzadzaj_zamowieniami/manage_orders.php">Zarządzaj <br> zamówieniami</a></button>
+            <button><a href="edytuj_informacje/edit_information.php">Edytuj  <br>informacje</a></button>
         </div>
     </div>
     </main>

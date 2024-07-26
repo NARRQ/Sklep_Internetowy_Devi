@@ -1,5 +1,5 @@
 <?php
-require('../baza/config.php');
+require('../../baza/config.php');
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administratora - Dodaj ogłoszenie</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -214,11 +214,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <!-- NAGŁÓWEK -->
-    <?php include 'header_admin.php'; ?>
+    <?php include '../header_admin.php'; ?>
     <main>
         <div class="edit-container">
             <h1>Panel Administratora - Dodaj ogłoszenie</h1>
-            <button><a href="admin_page.php">Panel Administratora</a></button>
+            <button><a href="../admin_page.php">Panel Administratora</a></button>
             <!-- Wyświetlanie komunikatu o dodaniu ogłoszenia -->
             <?php if (!empty($message)) : ?>
                 <div class="message">
@@ -330,6 +330,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
     <!-- STOPKA -->
-    <?php include '../footer.php'; ?>
+    <?php include '../../footer.php'; ?>
 </body>
 </html>

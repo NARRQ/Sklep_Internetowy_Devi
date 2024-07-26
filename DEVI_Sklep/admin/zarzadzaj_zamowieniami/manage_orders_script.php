@@ -1,5 +1,5 @@
 <?php
-require('../baza/config.php');
+require('../config.php');
 
 if (isset($_GET['id']) && is_numeric($_GET['id']) && isset($_GET['action'])) {
     $id = $_GET['id'];

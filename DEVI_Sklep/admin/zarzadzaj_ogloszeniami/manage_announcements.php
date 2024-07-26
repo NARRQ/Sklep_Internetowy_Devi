@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administratora - Zarządzaj ogłoszeniami</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <!-- Link do FontAwesome dla ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -89,14 +89,14 @@
 </head>
 <body>
     <!-- NAGLOWEK -->
-    <?php include 'header_admin.php';?>
+    <?php include '../header_admin.php';?>
     <main>
     <div class="login-container">
         <h1>Panel Administratora  - Zarządzaj ogłoszeniami</h1>
-        <button><a href="admin_page.php">Panel Administratora</a></button>
+        <button><a href="../admin_page.php">Panel Administratora</a></button>
         <!-- LOGIKA POLACZENIA -->
         <?php
-            require('../baza/config.php');
+            require('../../baza/config.php');
             // wyswietlenie danych z bazy
             $query = "SELECT id_laptopa,nazwa,miniatura FROM laptopy WHERE `czy_na_stronie`=1";
             
@@ -121,6 +121,6 @@
     </div>
     </main>
     <!-- STOPKA -->
-    <?php include '../footer.php';?>
+    <?php include '../../footer.php';?>
 </body>
 </html>
