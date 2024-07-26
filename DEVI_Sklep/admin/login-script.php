@@ -1,6 +1,8 @@
 <?php
 include_once('config.php');
 
+session_start(); // Moved to the top to ensure session starts early
+
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -19,19 +21,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("SELECT * FROM admin WHERE login = :login LIMIT 1");
-    $stmt->bindParam(':login', $username);
+    $stmt = $conn->prepare("SELECT `id_admina`, `login`, `haslo` FROM `admin` WHERE login = :login LIMIT 1");
+    
+    // Bind the parameters to prevent SQL injection
+    $stmt->bindParam(':login', $username, PDO::PARAM_STR);
+    
+    // Execute the statement
     $stmt->execute();
 
     // Fetch the user
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Verify the user and password
-    // if ($user && password_verify($password, $user['haslo'])) -- sprawdzenie usera i hasla po hashu
-    if(($user['login'] == $username) && ($user['haslo'] == $password)) 
-    {
-        session_start();
-        $_SESSION['logged_in'] = $user['id']; // Assumes there's an id field in the admin table
+    // Check if user exists and password is correct
+    if ($user && password_verify($password, $user['haslo'])) {
+        $_SESSION['logged_in'] = $user['id_admina']; // Assuming 'id_admina' is the correct column name for user ID
         $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
         header("Location: admin_page.php");
         exit();
