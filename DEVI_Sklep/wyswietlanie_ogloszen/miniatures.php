@@ -343,9 +343,9 @@
             <img id="modal-image" src="" alt="Zdjęcie produktu">
             <span class="arrow next">&#10095;</span>
             <div class="thumbnail-container">
-                  <!-- Miniaturki zdjęć -->
-            <div id="modal-thumbnails"></div>
-        </div>
+                <!-- Miniaturki zdjęć -->
+                <div id="modal-thumbnails"></div>
+            </div>
             <div class="header">
                 <h2 id="modal-title"></h2>
                 <div class="mini-info">
@@ -361,7 +361,7 @@
             </div>
             <div class="add-to-cart">
                 <label for="modal-quantity">Ilość:</label>
-                <input type="number" id="modal-quantity" min="1" value="1">
+                <input type="number" id="modal-quantity" min="1" value="1" max="">
                 <p id="modal-stock"></p>
                 <button id="modal-add-to-cart"><i class="fas fa-shopping-cart"></i> Dodaj do koszyka</button>
             </div>
@@ -376,15 +376,9 @@
         </div>
     </div>
 
-
-
-
-
     <!-- Treść główna -->
     <main>
         <div class="container">
-        
-            <!-- Filtry -->
             <!-- Filtry -->
             <div class="filters">
                 <h3>Filtruj</h3>
@@ -392,7 +386,6 @@
                 <select id="brand" name="brand">
                     <?php include 'filter_announcement.php'; ?>
                 </select>
-
 
                 <label for="screenSizeFrom">Przekątna ekranu od:</label>
                 <input type="number" id="screenSizeFrom" name="screenSizeFrom" min="0" placeholder="0">
@@ -405,9 +398,10 @@
 
                 <label for="priceTo">Cena do (w zł):</label>
                 <input type="number" id="priceTo" name="priceTo" min="0" placeholder="10000">
-                
+
                 <button type="button" id="applyFilters">Zastosuj filtry</button>
             </div>
+
             <!-- Sekcja sortowania -->
             <div class="sort-section">
                 <label for="sort">Sortuj według:</label>
@@ -416,14 +410,11 @@
                     <option value="price-desc">Cena malejąco</option>
                 </select>
             </div>
-             
 
             <!-- Ogłoszenia -->
             <div id="announcementContainer" class="announcement-container">
                 <!-- Wyświetlanie ogłoszeń -->
                 <?php
-                
-
                 require('../baza/config.php');
 
                 // Pobierz wartości filtrów i sortowania z GET
@@ -443,7 +434,6 @@
                 }
 
                 // Przygotowanie zapytania SQL z filtrami
-                // Przygotowanie zapytania SQL z filtrami
                 $query = "
                 SELECT l.id_laptopa, l.nazwa, l.cena, l.producent, l.procesor, l.ram, l.grafika, l.procesor_sz, l.dysk, l.klawiatura, l.przekatna, l.rozdzielczosc, l.matryca, l.system, l.porty, l.komunikacja, l.multimedia, l.stan, l.czas_pracy, l.zasilacz, l.opis, l.ilosc, l.miniatura, GROUP_CONCAT(z.sciezka) AS zdjecia
                 FROM laptopy l
@@ -455,12 +445,6 @@
                 GROUP BY l.id_laptopa
                 $sortOrder
                 ";
-
-
-
-                
-
-                
 
                 // Wykonanie zapytania SQL
                 $announcements = mysqli_query($conn, $query);
@@ -507,193 +491,155 @@
                 <?php
                     }
                 } else {
-                    echo "<p>Brak ogłoszeń do wyświetlenia.</p>";
+                    echo '<p>Brak ogłoszeń spełniających podane kryteria.</p>';
                 }
-                ?>
 
+                // Zamknięcie połączenia z bazą danych
+                mysqli_close($conn);
+                ?>
             </div>
         </div>
     </main>
-    <!-- STOPKA -->
-    <?php include '../footer.php'; ?>
+
+    <!-- Stopka -->
+    <?php include 'footer_ogloszenia.php'; ?>
+
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-            const sortSelect = document.getElementById('sort');
-            const filterButton = document.getElementById('applyFilters');
-            const brandSelect = document.getElementById('brand');
-            const screenSizeFromInput = document.getElementById('screenSizeFrom');
-            const screenSizeToInput = document.getElementById('screenSizeTo');
-            const priceFromInput = document.getElementById('priceFrom');
-            const priceToInput = document.getElementById('priceTo');
+         document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById("announcementModal");
+    const modalImg = document.getElementById("modal-image");
+    const modalTitle = document.getElementById("modal-title");
+    const modalPrice = document.getElementById("modal-price");
+    const modalProcessor = document.getElementById("modal-processor");
+    const modalRam = document.getElementById("modal-ram");
+    const modalGraphics = document.getElementById("modal-graphics");
+    const modalStock = document.getElementById("modal-stock");
+    const modalQuantity = document.getElementById("modal-quantity");
+    const addToCartBtn = document.getElementById("modal-add-to-cart");
+    const closeModal = document.querySelector(".close");
+    const modalSpecification = document.getElementById("modal-specification");
+    const modalDescription = document.getElementById("modal-description");
+    const prevArrow = document.querySelector('.arrow.prev');
+    const nextArrow = document.querySelector('.arrow.next');
 
-            // Funkcja do aktualizacji URL na podstawie parametrów
-            function updateURL() {
-                const queryParams = new URLSearchParams(window.location.search);
+    let currentIndex = 0;
+    let currentAnnouncement = null;
 
-                // Dodaj filtry
-                if (brandSelect.value) queryParams.set('brand', brandSelect.value);
-                else queryParams.delete('brand');
-                
-                if (screenSizeFromInput.value) queryParams.set('screenSizeFrom', screenSizeFromInput.value);
-                else queryParams.delete('screenSizeFrom');
-                
-                if (screenSizeToInput.value) queryParams.set('screenSizeTo', screenSizeToInput.value);
-                else queryParams.delete('screenSizeTo');
-                
-                if (priceFromInput.value) queryParams.set('priceFrom', priceFromInput.value);
-                else queryParams.delete('priceFrom');
-                
-                if (priceToInput.value) queryParams.set('priceTo', priceToInput.value);
-                else queryParams.delete('priceTo');
+    const openModal = (announcement) => {
+        const images = announcement.dataset.zdjecia.split(',');
+        currentIndex = 0; // Ustawienie początkowego indeksu na pierwszy obraz
+        modalImg.src = images[currentIndex];
+        modalTitle.textContent = announcement.dataset.nazwa;
+        modalPrice.textContent = `${announcement.dataset.cena}`;
+        modalProcessor.textContent = announcement.dataset.procesor;
+        modalRam.textContent = announcement.dataset.ram;
+        modalGraphics.textContent = announcement.dataset.grafika;
+        modalStock.textContent = `Dostępność: ${announcement.dataset.ilosc} sztuk`;
+        
+        // Ustawienie maksymalnej ilości w polu input
+        modalQuantity.max = announcement.dataset.ilosc;
+        modalQuantity.value = 1; // Resetowanie wartości do 1 przy każdym otwarciu modala
 
-                // Dodaj sortowanie
-                if (sortSelect.value) queryParams.set('sort', sortSelect.value);
-                else queryParams.delete('sort');
+        modalSpecification.innerHTML = `
+            <h3>Specyfikacja</h3>
+            <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
+            <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
+            <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
+            <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
+            <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
+            <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
+            <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
+            <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
+            <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
+            <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
+            <p><strong>Typ matrycy:</strong> ${announcement.dataset.matryca}</p>
+            <p><strong>System operacyjny:</strong> ${announcement.dataset.system}</p>
+            <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
+            <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
+            <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
+            <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
+            <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
+            <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
+        `;
 
-                // Przekierowanie do URL z nowymi parametrami
-                window.location.search = queryParams.toString();
-            }
+        modalDescription.innerHTML = `
+            <h3>Opis</h3>
+            <p>${announcement.dataset.opis}</p>
+        `;
 
-            filterButton.addEventListener('click', updateURL);
-            sortSelect.addEventListener('change', updateURL);
+        modal.style.display = "block";
+    };
 
-            // Załaduj parametry z URL i ustaw je 
-            function loadParametersFromURL() {
-                const queryParams = new URLSearchParams(window.location.search);
+    const closeModalFunction = () => {
+        modal.style.display = "none";
+    };
 
-                if (queryParams.has('brand')) brandSelect.value = queryParams.get('brand');
-                if (queryParams.has('screenSizeFrom')) screenSizeFromInput.value = queryParams.get('screenSizeFrom');
-                if (queryParams.has('screenSizeTo')) screenSizeToInput.value = queryParams.get('screenSizeTo');
-                if (queryParams.has('priceFrom')) priceFromInput.value = queryParams.get('priceFrom');
-                if (queryParams.has('priceTo')) priceToInput.value = queryParams.get('priceTo');
-                if (queryParams.has('sort')) sortSelect.value = queryParams.get('sort');
-            }
+    const showImage = (index) => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        if (index >= 0 && index < images.length) {
+            modalImg.src = images[index];
+        }
+    };
 
-            loadParametersFromURL();
+    prevArrow.addEventListener('click', () => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+    });
+
+    nextArrow.addEventListener('click', () => {
+        const images = currentAnnouncement.dataset.zdjecia.split(',');
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+    });
+
+    document.querySelectorAll('.announcement').forEach(announcement => {
+        announcement.addEventListener('click', () => {
+            currentAnnouncement = announcement;
+            openModal(announcement);
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById("announcementModal");
-            const modalImg = document.getElementById("modal-image");
-            const modalTitle = document.getElementById("modal-title");
-            const modalPrice = document.getElementById("modal-price");
-            const modalProcessor = document.getElementById("modal-processor");
-            const modalRam = document.getElementById("modal-ram");
-            const modalGraphics = document.getElementById("modal-graphics");
-            const modalStock = document.getElementById("modal-stock");
-            const addToCartBtn = document.getElementById("modal-add-to-cart");
-            const closeModal = document.querySelector(".close");
-            const modalSpecification = document.getElementById("modal-specification");
-            const modalDescription = document.getElementById("modal-description");
-            const prevArrow = document.querySelector('.arrow.prev');
-            const nextArrow = document.querySelector('.arrow.next');
+    });
 
-            let currentIndex = 0;
-            let currentAnnouncement = null;
+    closeModal.addEventListener('click', closeModalFunction);
 
-            const openModal = (announcement) => {
-                const images = announcement.dataset.zdjecia.split(',');
-                currentIndex = 0; 
-                modalImg.src = images[currentIndex];
-                modalTitle.textContent = announcement.dataset.nazwa;
-                modalPrice.textContent = `${announcement.dataset.cena}`;
-                modalProcessor.textContent = announcement.dataset.procesor;
-                modalRam.textContent = announcement.dataset.ram;
-                modalGraphics.textContent = announcement.dataset.grafika;
-                modalStock.textContent = `Dostępność: ${announcement.dataset.ilosc} sztuk`;
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModalFunction();
+        }
+    });
 
-                modalSpecification.innerHTML = `
-                    <h3>Specyfikacja</h3>
-                    <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
-                    <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
-                    <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
-                    <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
-                    <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
-                    <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
-                    <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
-                    <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
-                    <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
-                    <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
-                    <p><strong>Typ matrycy:</strong> ${announcement.dataset.matryca}</p>
-                    <p><strong>System operacyjny:</strong> ${announcement.dataset.system}</p>
-                    <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
-                    <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
-                    <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
-                    <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
-                    <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
-                    <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
-                `;
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        const brand = document.getElementById('brand').value || '';
+        const screenSizeFrom = document.getElementById('screenSizeFrom').value || '';
+        const screenSizeTo = document.getElementById('screenSizeTo').value || '';
+        const priceFrom = document.getElementById('priceFrom').value || '';
+        const priceTo = document.getElementById('priceTo').value || '';
 
-                modalDescription.innerHTML = `
-                    <h3>Opis</h3>
-                    <p>${announcement.dataset.opis}</p>
-                `;
-
-                modal.style.display = "block";
-            };
-
-            const closeModalFunction = () => {
-                modal.style.display = "none";
-            };
-
-            const showImage = (index) => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                if (index >= 0 && index < images.length) {
-                    modalImg.src = images[index];
-                }
-            };
-
-            prevArrow.addEventListener('click', () => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                showImage(currentIndex);
-            });
-
-            nextArrow.addEventListener('click', () => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex + 1) % images.length;
-                showImage(currentIndex);
-            });
-
-            document.querySelectorAll('.announcement').forEach(announcement => {
-                announcement.addEventListener('click', () => {
-                    currentAnnouncement = announcement;
-                    openModal(announcement);
-                });
-            });
-
-            closeModal.addEventListener('click', closeModalFunction);
-
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModalFunction();
-                }
-            });
-
-            document.getElementById('applyFilters').addEventListener('click', function() {
-                const brand = document.getElementById('brand').value || '';
-                const screenSizeFrom = document.getElementById('screenSizeFrom').value || '';
-                const screenSizeTo = document.getElementById('screenSizeTo').value || '';
-                const priceFrom = document.getElementById('priceFrom').value || '';
-                const priceTo = document.getElementById('priceTo').value || '';
-                const sort = document.getElementById('sort').value || '';
-
-                let queryParams = [];
-
-                if (brand) queryParams.push(`brand=${encodeURIComponent(brand)}`);
+        // Initialize an empty array to hold the query parameters
+        let queryParams = [];
+        // Add parameters to the query string if they are not empty
+        if (brand) queryParams.push(`brand=${encodeURIComponent(brand)}`);
                 if (screenSizeFrom) queryParams.push(`screenSizeFrom=${encodeURIComponent(screenSizeFrom)}`);
                 if (screenSizeTo) queryParams.push(`screenSizeTo=${encodeURIComponent(screenSizeTo)}`);
                 if (priceFrom) queryParams.push(`priceFrom=${encodeURIComponent(priceFrom)}`);
                 if (priceTo) queryParams.push(`priceTo=${encodeURIComponent(priceTo)}`);
-                if (sort) queryParams.push(`sort=${encodeURIComponent(sort)}`);
-
+                // Join all parameters with '&' and prepend with '?'
                 let queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
-                window.location.href = `miniatures.php${queryString}`;
+                // Debugging output
+                console.log(`Redirecting to: miniatures.php${queryString}`);
+
+                // Redirect with query parameters
+                window.location.href = `miniatures.php${queryString}`;  
             });
-            
+            // Dodaj walidację w polu ilości
+            modalQuantity.addEventListener('input', function() {
+            const maxQuantity = parseInt(modalQuantity.max, 10);
+            if (parseInt(modalQuantity.value, 10) > maxQuantity) {
+                modalQuantity.value = maxQuantity;
+            }
         });
-
-
+    });
 
     </script>
 </body>
