@@ -98,7 +98,7 @@
         <?php
             require('../baza/config.php');
             // wyswietlenie danych z bazy
-            $query = "SELECT id_laptopa,nazwa,miniatura FROM laptopy";
+            $query = "SELECT id_laptopa,nazwa,miniatura FROM laptopy WHERE `czy_na_stronie`=1";
             
             $result = mysqli_query($conn,$query);
             ?>

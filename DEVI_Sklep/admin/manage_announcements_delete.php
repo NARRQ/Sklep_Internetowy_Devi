@@ -3,10 +3,9 @@
     
     if (isset($_GET['id'])&& is_numeric($_GET['id'])) {
         $id = $_GET['id'];
-        $query1 = "DELETE FROM lap_zamowienia WHERE id_laptopa=$id";
-        $query2 = "DELETE FROM laptopy WHERE id_laptopa=$id";
+        $query = "UPDATE `laptopy` SET `czy_na_stronie`=0  WHERE id_laptopa=$id";
 
-        if (mysqli_query($conn, $query1)&&mysqli_query($conn, $query2)) {
+        if (mysqli_query($conn, $query)) {
             echo '<div class="message">Ogłoszenie pomyślnie usunięto</div>';
         } else {
             echo '<div class="message">Błąd usunięcia ogłoszenia: ' . mysqli_error($conn) . '</div>';
