@@ -16,29 +16,28 @@ if (isset($_POST['update'])) {
     $ilosc = intval($_POST['ilosc']);
 
     if (isset($_SESSION['koszyk'][$id_laptopa])) {
+        // Pobierz dostępność produktu z bazy danych
+        $stmt = $conn->prepare("SELECT ilosc FROM laptopy WHERE id_laptopa = ?");
+        $stmt->bind_param('i', $id_laptopa);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $laptop = $result->fetch_assoc();
+        $dostepnosc = $laptop['ilosc'];
+
         if ($ilosc > 0) {
-            $_SESSION['koszyk'][$id_laptopa]['ilosc'] = $ilosc;
+            if ($ilosc <= $dostepnosc) {
+                $_SESSION['koszyk'][$id_laptopa]['ilosc'] = $ilosc;
+            } else {
+                // Wyświetl błąd, jeśli ilość przekracza dostępność
+                echo "<script>alert('Przekroczono dostępną ilość produktu!');</script>";
+            }
         } else {
             // Usuń produkt z koszyka, jeśli ilość jest zerowa lub ujemna
             unset($_SESSION['koszyk'][$id_laptopa]);
         }
-    }
-}
 
-// Przekierowanie do podanie_danych.php po kliknięciu "Zamawiam"
-if (isset($_POST['checkout'])) {
-    // Sprawdź, czy opcja dostawy została wybrana
-    if (isset($_POST['delivery_option'])) {
-        $delivery_option = $_POST['delivery_option'];
-        $_SESSION['delivery_option'] = $delivery_option;
-    } else {
-        // Jeśli opcja dostawy nie została wybrana, ustaw domyślną wartość lub obsłuż błąd
-        $_SESSION['delivery_option'] = '';
+        $stmt->close();
     }
-
-    // Przekierowanie na stronę z danymi osobowymi
-    header('Location: http://localhost/DEVI_Sklep/koszyk_zamowienie/podanie_danych.php');
-    exit();
 }
 
 // Pobierz dane koszyka
@@ -80,7 +79,37 @@ if (isset($_GET['id_laptopa']) && isset($_GET['ilosc'])) {
     exit();
 }
 
-$conn->close();
+// Pobierz opcje dostawy z bazy danych
+$deliveryOptions = array();
+$stmt = $conn->prepare("SELECT id_dostawy,nazwa, cena_dostawy FROM dostawa");
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_assoc()) {
+    $deliveryOptions[] = $row;
+}
+
+// Obsługuje przekierowanie do podanie_danych.php po kliknięciu "Zamawiam"
+if (isset($_POST['checkout'])) {
+    if (isset($_POST['delivery_option'])) {
+        $selected_option_name = htmlspecialchars($_POST['delivery_option']);
+        
+        foreach ($deliveryOptions as $option) {
+            if ($option['nazwa'] === $selected_option_name) {
+                $_SESSION['delivery_option'] = $option['id_dostawy'];
+                break;
+            }
+        }
+        
+        $_SESSION['delivery_options'] = $deliveryOptions; // Zapisz wszystkie opcje w sesji
+    } else {
+        $_SESSION['delivery_option'] = ''; // Możliwe, że to jest problematyczne - nie powinno być pustym ciągiem
+    }
+
+    header('Location: podanie_danych.php');
+    exit();
+}
+
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -205,7 +234,6 @@ $conn->close();
 
         .shipping-options h4 {
             margin-bottom: 15px;
-           
         }
 
         .shipping-options ul {
@@ -217,7 +245,7 @@ $conn->close();
             margin-bottom: 10px;
         }
 
-        .shipping-options input[type="checkbox"] {
+        .shipping-options input[type="radio"] {
             margin-right: 5px;
         }
     </style>
@@ -234,60 +262,58 @@ $conn->close();
     <?php include '../koszyk_zamowienie/header_k.php'; ?>
    
     <main>
-        <div class="container">
-            <?php
-            if (isset($_SESSION['koszyk']) && !empty($_SESSION['koszyk'])) {
-                $total = 0;
-                foreach ($_SESSION['koszyk'] as $id_laptopa => $item) {
-                    $total += $item['cena'] * $item['ilosc'];
-                    echo '
-                        <div class="cart-item">
-                            <img src="upolads/' . htmlspecialchars($item['miniatura']) . '" alt="laptop">
-                            <div class="cart-item-details">
-                                <h3>' . htmlspecialchars($item['nazwa']) . '</h3>
-                                <form action="koszyk.php" method="POST" style="display: flex; align-items: center;">
-                                    <input type="hidden" name="id_laptopa" value="' . htmlspecialchars($id_laptopa) . '">
-                                    <input type="number" name="ilosc" value="' . htmlspecialchars($item['ilosc']) . '" min="1" style="width: 60px; margin-right: 10px;">
-                                    <button type="submit" name="update" class="update-quantity">Zaktualizuj ilość</button>
-                                </form>
-                                <p>' . htmlspecialchars($item['cena']) . ' zł</p>
-                                <a href="koszyk.php?remove=' . urlencode($id_laptopa) . '" onclick="confirmRemove(event)">
-                                    <button class="remove-item">X</button>
-                                </a>
-                            </div>
-                        </div>
-                    ';
-                }
+    <div class="container">
+        <?php
+        if (isset($_SESSION['koszyk']) && !empty($_SESSION['koszyk'])) {
+            $total = 0;
+            foreach ($_SESSION['koszyk'] as $id_laptopa => $item) {
+                $total += $item['cena'] * $item['ilosc'];
                 echo '
-                    <div class="cart-summary">
-                        <h3>Do zapłaty: ' . htmlspecialchars($total) . ' zł</h3>
-                        <form action="koszyk.php" method="POST">
-                            <div class="shipping-options">
-                                <h4>Wybierz opcję dostawy</h4>
-                                <ul>
-                                    <li>
-                                        <input type="radio" name="delivery_option" id="pickup" value="pickup" ' . (isset($_POST['delivery_option']) && $_POST['delivery_option'] == 'pickup' ? 'checked' : '') . '>
-                                        <label for="pickup">(ul. ks. J. Popiełuszki 20a/53a 35-328 Rzeszów) - 0 zł</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" name="delivery_option" id="delivery" value="delivery" ' . (isset($_POST['delivery_option']) && $_POST['delivery_option'] == 'delivery' ? 'checked' : '') . '>
-                                        <label for="delivery">Przesyłka kurierska i przelew na nr konta - 20 zł</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" name="delivery_option" id="cod" value="cod" ' . (isset($_POST['delivery_option']) && $_POST['delivery_option'] == 'cod' ? 'checked' : '') . '>
-                                        <label for="cod">Przesyłka kurierska za pobraniem - 25 zł</label>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button type="submit" name="checkout" class="checkout-button">Zamawiam</button>
-                        </form>
+                    <div class="cart-item">
+                        <img src="../upolads' . htmlspecialchars($item['miniatura']) . '" alt="laptop">
+                        <div class="cart-item-details">
+                            <h3>' . htmlspecialchars($item['nazwa']) . '</h3>
+                            <form action="koszyk.php" method="POST" style="display: flex; align-items: center;">
+                                <input type="hidden" name="id_laptopa" value="' . htmlspecialchars($id_laptopa) . '">
+                                <input type="number" name="ilosc" value="' . htmlspecialchars($item['ilosc']) . '" min="1" style="width: 60px; margin-right: 10px;">
+                                <button type="submit" name="update" class="update-quantity">Zaktualizuj ilość</button>
+                            </form>
+                            <p>' . htmlspecialchars($item['cena']) . ' zł</p>
+                            <a href="koszyk.php?remove=' . urlencode($id_laptopa) . '" onclick="confirmRemove(event)">
+                                <button class="remove-item">X</button>
+                            </a>
+                        </div>
                     </div>
                 ';
-            } else {
-                echo '<p>Twój koszyk jest pusty.</p>';
             }
             ?>
-        </div>
+            <div class="cart-summary">
+                <h3>Do zapłaty: <?php echo htmlspecialchars($total); ?> zł</h3>
+                <form action="koszyk.php" method="POST">
+                    <div class="shipping-options">
+                        <h4>Wybierz opcję dostawy</h4>
+                        <ul>
+                            <?php foreach ($deliveryOptions as $option): ?>
+                                <li>
+                                    <input type="radio" name="delivery_option" id="delivery_<?php echo htmlspecialchars($option['nazwa']); ?>" value="<?php echo htmlspecialchars($option['nazwa']); ?>" <?php echo (isset($_SESSION['delivery_option']) && $_SESSION['delivery_option'] == htmlspecialchars($option['id_dostawy'])) ? 'checked' : ''; ?>>
+                                    <label for="delivery_<?php echo htmlspecialchars($option['nazwa']); ?>"><?php echo htmlspecialchars($option['nazwa']); ?> - <?php echo htmlspecialchars($option['cena_dostawy']); ?> zł</label>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <button type="submit" name="checkout" class="checkout-button">Zamawiam</button>
+                </form>
+
+
+
+
+            </div>
+            <?php
+        } else {
+            echo '<p>Twój koszyk jest pusty.</p>';
+        }
+        ?>
+    </div>
     </main>
     <?php include 'footer_k.php'; ?>
 </body>

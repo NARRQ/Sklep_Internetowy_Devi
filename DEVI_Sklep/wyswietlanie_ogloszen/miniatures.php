@@ -588,6 +588,7 @@
             const modalRam = document.getElementById("modal-ram");
             const modalGraphics = document.getElementById("modal-graphics");
             const modalStock = document.getElementById("modal-stock");
+            const modalQuantityInput = document.getElementById("modal-quantity");
             const addToCartBtn = document.getElementById("modal-add-to-cart");
             const closeModal = document.querySelector(".close");
             const modalSpecification = document.getElementById("modal-specification");
@@ -618,13 +619,13 @@
 
                 modalSpecification.innerHTML = `
                     <h3>Specyfikacja</h3>
-                    <p><strong>Nazwa modelu:</strong>${announcement.dataset.nazwa}</p>
+                    <p><strong>Nazwa modelu:</strong> ${announcement.dataset.nazwa}</p>
                     <p><strong>Producent:</strong> ${announcement.dataset.producent}</p>
                     <p><strong>Procesor:</strong> ${announcement.dataset.procesor}</p>
                     <p><strong>Procesor szczegóły:</strong> ${announcement.dataset.procesorsz}</p>
-                    <p><strong>Pamięć RAM:</strong>${announcement.dataset.ram}</p>
+                    <p><strong>Pamięć RAM:</strong> ${announcement.dataset.ram}</p>
                     <p><strong>Dysk:</strong> ${announcement.dataset.dysk}</p>
-                    <p><strong>Grafika:</strong>${announcement.dataset.grafika}</p>
+                    <p><strong>Grafika:</strong> ${announcement.dataset.grafika}</p>
                     <p><strong>Układ klawiatury:</strong> ${announcement.dataset.klawiatura}</p>
                     <p><strong>Przekątna ekranu:</strong> ${announcement.dataset.przekatna}</p>
                     <p><strong>Rozdzielczość:</strong> ${announcement.dataset.rozdzielczosc}</p>
@@ -633,8 +634,8 @@
                     <p><strong>Porty:</strong> ${announcement.dataset.porty}</p>
                     <p><strong>Komunikacja:</strong> ${announcement.dataset.komunikacja}</p>
                     <p><strong>Multimedia:</strong> ${announcement.dataset.multimedia}</p>
-                    <p><strong>Stan wizualny:</strong> ${announcement.dataset.stan}</p>
-                    <p><strong>Średni czas pracy na baterii:</strong> ${announcement.dataset.czaspracy}</p>
+                    <p><strong>Stan:</strong> ${announcement.dataset.stan}</p>
+                    <p><strong>Czas pracy baterii:</strong> ${announcement.dataset.czaspracy}</p>
                     <p><strong>Zasilacz:</strong> ${announcement.dataset.zasilacz}</p>
                 `;
 
@@ -644,30 +645,64 @@
                 `;
 
                 modal.style.display = "block";
+                currentAnnouncement = announcement;
             };
 
             const closeModalFunction = () => {
                 modal.style.display = "none";
             };
 
-            const showImage = (index) => {
-                const images = currentAnnouncement.dataset.zdjecia.split(',');
-                if (index >= 0 && index < images.length) {
-                    modalImg.src = images[index];
+            const validateQuantity = () => {
+                const availableStock = parseInt(addToCartBtn.getAttribute('data-ilosc'), 10);
+                const requestedQuantity = parseInt(modalQuantityInput.value, 10);
+                if (requestedQuantity > availableStock) {
+                    alert(`Nie można dodać więcej niż ${availableStock} sztuk.`);
+                    modalQuantityInput.value = availableStock;
                 }
             };
 
+            const addToCart = () => {
+                const availableStock = parseInt(addToCartBtn.getAttribute('data-ilosc'), 10);
+                const requestedQuantity = parseInt(modalQuantityInput.value, 10);
+
+                if (requestedQuantity > availableStock) {
+                    alert(`Nie można dodać więcej niż ${availableStock} sztuk.`);
+                    return;
+                }
+
+                // Dodaj logikę do dodania produktu do koszyka
+                alert('Dodano do koszyka');
+                closeModalFunction();
+            };
+
+            addToCartBtn.addEventListener('click', addToCart);
+            modalQuantityInput.addEventListener('input', validateQuantity);
+
+            closeModal.addEventListener('click', closeModalFunction);
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    closeModalFunction();
+                }
+            });
+
+            const announcements = document.querySelectorAll('.announcement');
+            announcements.forEach(announcement => {
+                announcement.addEventListener('click', () => openModal(announcement));
+            });
+
             prevArrow.addEventListener('click', () => {
                 const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                showImage(currentIndex);
+                currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+                modalImg.src = images[currentIndex];
             });
 
             nextArrow.addEventListener('click', () => {
                 const images = currentAnnouncement.dataset.zdjecia.split(',');
-                currentIndex = (currentIndex + 1) % images.length;
-                showImage(currentIndex);
+                currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+                modalImg.src = images[currentIndex];
             });
+
+
 
             document.querySelectorAll('.announcement').forEach(announcement => {
                 announcement.addEventListener('click', () => {
@@ -691,6 +726,8 @@
                 const nazwa = addToCartBtn.getAttribute('data-nazwa');
                 const cena = addToCartBtn.getAttribute('data-cena');
                 const ilosc = addToCartBtn.getAttribute('data-ilosc');
+
+                
 
                 console.log('Dodaj do koszyka: ', productId, quantity);
 

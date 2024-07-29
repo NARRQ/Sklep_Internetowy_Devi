@@ -1,14 +1,37 @@
 <?php
 session_start();
-include '../baza/config.php'; // Upewnij się, że to jest poprawna ścieżka do Twojego pliku z konfiguracją bazy danych
+include '../baza/config.php';
 
-// Sprawdzenie, czy użytkownik jest zalogowany do sesji koszyka
+// Check if the cart session is set and not empty
 if (!isset($_SESSION['koszyk']) || empty($_SESSION['koszyk'])) {
     header('Location: koszyk.php');
     exit();
 }
 
-// Przetwarzanie danych formularza
+// Function to calculate the total cart sum including delivery cost
+function oblicz_sume_koszyka($koszyk, $deliveryOption) {
+    $suma = 0;
+    foreach ($koszyk as $produkt) {
+        $suma += $produkt['cena'] * $produkt['ilosc'];
+    }
+    
+    // Check if delivery option is set and add its cost
+    if ($deliveryOption) {
+        foreach ($_SESSION['delivery_options'] as $option) {
+            if ($option['id_dostawy'] === $deliveryOption) { // Note the comparison here
+                $suma += $option['cena_dostawy'];
+                break;
+            }
+        }
+    }
+    
+    return $suma;
+}
+
+$selectedOptionId = isset($_SESSION['delivery_option']) ? intval($_SESSION['delivery_option']) : 0;
+$suma_koszyka = oblicz_sume_koszyka($_SESSION['koszyk'], $selectedOptionId);
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     $imie = htmlspecialchars($_POST['imie']);
     $nazwisko = htmlspecialchars($_POST['nazwisko']);
@@ -16,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     $telefon = htmlspecialchars($_POST['telefon']);
     $dodatkowe_informacje = htmlspecialchars($_POST['dodatkowe_informacje']);
 
-    // Prosta walidacja danych
     $errors = [];
     if (empty($imie)) $errors[] = 'Imię jest wymagane.';
     if (empty($nazwisko)) $errors[] = 'Nazwisko jest wymagane.';
@@ -24,71 +46,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     if (empty($telefon)) $errors[] = 'Telefon jest wymagany.';
 
     if (empty($errors)) {
-        // Zapisz dane do sesji
-        $_SESSION['dane_klienta'] = [
-            'imie' => $imie,
-            'nazwisko' => $nazwisko,
-            'email' => $email,
-            'telefon' => $telefon,
-            'dodatkowe_informacje' => $dodatkowe_informacje
-        ];
+        // Insert client data into the klienci table
+        $sql_klienci = "INSERT INTO klienci (imie, nazwisko, email, telefon) VALUES (?, ?, ?, ?)";
+        $stmt_klienci = $conn->prepare($sql_klienci);
+        $stmt_klienci->bind_param("ssss", $imie, $nazwisko, $email, $telefon);
 
-        // Przekierowanie do podsumowania zamówienia lub strony z potwierdzeniem
-        header('Location: podsumowanie.php');
-        exit();
+        if ($stmt_klienci->execute()) {
+            $id_klienta = $stmt_klienci->insert_id;
+
+            // Insert the order into the zamowienia table
+            $status = 'Nowe'; // Assuming 'Nowe' as a default status
+            $data_zamowienia = date('Y-m-d H:i:s'); // Current date and time
+            $id_dostawy = isset($_SESSION['delivery_option']) ? intval($_SESSION['delivery_option']) : 0;
+
+            // Debugowanie
+            echo 'Wybrana opcja dostawy (ID): ' . $id_dostawy;
+
+            $sql_zamowienia = "INSERT INTO zamowienia (status, id_klienta, data_zamowienia, dodatkowe_informacje, cena_calkowita, id_dostawy) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt_zamowienia = $conn->prepare($sql_zamowienia);
+            $stmt_zamowienia->bind_param("sissdi", $status, $id_klienta, $data_zamowienia, $dodatkowe_informacje, $suma_koszyka, $id_dostawy);
+
+            if ($stmt_zamowienia->execute()) {
+                $id_zamowienia = $stmt_zamowienia->insert_id;
+
+                // Insert order details into the lap_zamowienia table
+                $sql_lap_zamowienia = "INSERT INTO lap_zamowienia (id_zamowienia, id_laptopa, ilosc, cena_razem) VALUES (?, ?, ?, ?)";
+                $stmt_lap_zamowienia = $conn->prepare($sql_lap_zamowienia);
+
+                foreach ($_SESSION['koszyk'] as $id_laptopa => $produkt) {
+                    $ilosc = $produkt['ilosc'];
+                    $cena_razem = $produkt['cena'] * $ilosc;
+
+                    $stmt_lap_zamowienia->bind_param("iiid", $id_zamowienia, $id_laptopa, $ilosc, $cena_razem);
+                    $stmt_lap_zamowienia->execute();
+                }
+
+                // Clear the cart session
+                unset($_SESSION['koszyk']);
+                header('Location: podsumowanie.php');
+                exit();
+            } else {
+                $errors[] = 'Błąd przy zapisie zamówienia do bazy.';
+            }
+        } else {
+            $errors[] = 'Błąd przy zapisie danych klienta do bazy.';
+        }
     }
 }
 
-// Funkcja do obliczania sumy koszyka
-function oblicz_sume_koszyka($koszyk) {
-    $suma = 0;
-    foreach ($koszyk as $produkt) {
-        $suma += $produkt['cena'] * $produkt['ilosc'];
+
+
+// Get the saved delivery options from the session
+$deliveryOptions = isset($_SESSION['delivery_options']) ? $_SESSION['delivery_options'] : array();
+$selectedOption = isset($_SESSION['delivery_option']) ? $_SESSION['delivery_option'] : 0;
+
+// Find the description for the selected delivery option
+$delivery_option_message = 'Nie wybrano opcji dostawy';
+foreach ($deliveryOptions as $option) {
+    if ($option['id_dostawy'] == $selectedOption) {
+        $delivery_option_message = $option['nazwa'] . ' - ' . $option['cena_dostawy'] . ' zł';
+        break;
     }
-    return $suma;
 }
-
-$suma_koszyka = oblicz_sume_koszyka($_SESSION['koszyk']);
-// Sprawdzenie, czy użytkownik jest zalogowany do sesji koszyka
-if (!isset($_SESSION['koszyk']) || empty($_SESSION['koszyk'])) {
-    header('Location: koszyk.php');
-    exit();
-}
-// Przypisanie opcji dostawy z sesji
-$delivery_option = isset($_SESSION['delivery_option']) ? $_SESSION['delivery_option'] : '';
-
-// Sprawdzenie, czy opcja dostawy jest ustawiona
-if (!isset($_SESSION['delivery_option'])) {
-    header('Location: koszyk.php');
-    exit();
-}
-
-$delivery_option = $_SESSION['delivery_option'];
-
-switch ($delivery_option) {
-    case 'pickup':
-        $delivery_option_message = 'Odbiór osobisty (ul. ks. J. Popiełuszki 20a/53a 35-328 Rzeszów) - 0 zł';
-        break;
-    case 'delivery':
-        $delivery_option_message = 'Przesyłka kurierska i przelew na nr konta - 20 zł';
-        break;
-    case 'cod':
-        $delivery_option_message = 'Przesyłka kurierska za pobraniem - 25 zł';
-        break;
-    default:
-        $delivery_option_message = 'Nie wybrano opcji dostawy';
-        break;
-}
-
-
-
-
-// Sprawdzenie, czy opcja dostawy jest ustawiona
-if (!isset($_SESSION['delivery_option'])) {
-    header('Location: koszyk.php');
-    exit();
-}
-
 
 ?>
 
@@ -255,7 +274,7 @@ if (!isset($_SESSION['delivery_option'])) {
                 }
                 ?>
 
-                <form action="podaj_dane.php" method="POST">
+                <form action="podanie_danych.php" method="POST">
                     <div class="form-group">
                         <label for="imie">Imię:</label>
                         <input type="text" id="imie" name="imie" value="<?php echo isset($_POST['imie']) ? htmlspecialchars($_POST['imie']) : ''; ?>">
@@ -280,7 +299,7 @@ if (!isset($_SESSION['delivery_option'])) {
                 </form>
             </div>
 
-             <!-- Podsumowanie koszyka -->
+            <!-- Podsumowanie koszyka -->
             <div class="summary-section">
                 <div class="summary">
                     <h2>Podsumowanie Koszyka</h2>
@@ -303,10 +322,10 @@ if (!isset($_SESSION['delivery_option'])) {
                     </div>
                     <div class="delivery-option">
                         <h4>Wybrana opcja dostawy:</h4>
-                        <p><?php echo $delivery_option_message; ?></p>
+                        <p><?php echo htmlspecialchars($delivery_option_message); ?></p>
                     </div>
                 </div>
-
+            </div>
         </div>
     </main>
 
