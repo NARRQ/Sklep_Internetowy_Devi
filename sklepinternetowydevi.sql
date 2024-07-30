@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Lip 23, 2024 at 12:39 PM
+-- Host: localhost
+-- Generation Time: Lip 30, 2024 at 12:42 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id_admina`, `login`, `haslo`) VALUES
-(1, 'admin@gmail.com', 'qaz@WSX');
+(1, 'admin@gmail.com', '$2y$10$gF6c.Fy9MfsbRfq9ef1N7OB2IY6pi0OEHgtBBR90ttHxvcVDOtkIS');
 
 -- --------------------------------------------------------
 
