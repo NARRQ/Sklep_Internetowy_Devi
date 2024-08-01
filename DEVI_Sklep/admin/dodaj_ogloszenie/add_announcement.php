@@ -4,8 +4,68 @@ include_once('../auth_check.php');
 <?php
 require('../../baza/config.php');
 $message = '';
+function sprawdz_bledy($file)
+{
+  if ($file['error'] > 0)
+  {
+    echo 'problem: ';
+    switch ($file['error'])
+    {
+      case 1: {echo 'Rozmiar pliku jest zbyt duży.'; break;} 
+      case 2: {echo 'Rozmiar pliku jest zbyt duży.'; break;}
+      case 3: {echo 'Plik wysłany tylko częściowo.'; break;}
+      case 4: {echo 'Nie wysłano żadnego pliku.'; break;}
+      default: {echo 'Wystąpił błąd podczas wysyłania.'; break;}
+    }
+    return false;
+  }
+  return true;
+}
+
+function sprawdz_typ($file)
+{
+	if ($file['type'] != 'image/png')
+		return false;
+	return true;
+}
+
+function zapisz_plik($file, $destinationPath)
+{
+  if(is_uploaded_file($file['tmp_name']))
+  {
+    if(!move_uploaded_file($file['tmp_name'], $destinationPath))
+    {
+      echo 'problem: Nie udało się skopiować pliku do katalogu.';
+      return false;  
+    }
+  }
+  else
+  {
+    echo 'problem: Możliwy atak podczas przesyłania pliku.';
+	echo 'Plik nie został zapisany.';
+    return false;
+  }
+  return true;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //obrazki
+    // Sprawdzenie i zapis głównego obrazu
+    $mainImageDestination = '../product_images/' . $_FILES['main_image']['name'];
+    if (!sprawdz_bledy($_FILES['main_image']) || !sprawdz_typ($_FILES['main_image'])) {
+        die();
+    }
+    zapisz_plik($_FILES['main_image'], $mainImageDestination);
+
+    // Sprawdzenie i zapis dodatkowych obrazów
+    foreach ($_FILES['images']['tmp_name'] as $index => $tmpName) {
+        if (!sprawdz_bledy($_FILES['images']) || !sprawdz_typ($_FILES['images'])) {
+            die();
+        }
+        $additionalImageDestination = '../product_images/' . $_FILES['images']['name'][$index];
+        zapisz_plik(['tmp_name' => $tmpName, 'type' => $_FILES['images']['type'][$index]], $additionalImageDestination);
+    }
+
     $manufacturer = htmlentities($_POST['manufacturer']);
     $name = htmlentities($_POST['name']);
     $processor = htmlentities($_POST['processor']);
@@ -27,21 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = htmlentities($_POST['price']);
     $quantity = htmlentities($_POST['quantity']);
     $description = htmlentities($_POST['description']);
-
-    // Handle file uploads
-    $main_image = $_FILES['main_image']['name'];
-    $main_image_tmp = $_FILES['main_image']['tmp_name'];
-    $main_image_folder = '../uploads/' . $main_image;
-    move_uploaded_file($main_image_tmp, $main_image_folder);
-
-    $additional_images = [];
-    foreach ($_FILES['images']['name'] as $key => $image_name) {
-        $image_tmp = $_FILES['images']['tmp_name'][$key];
-        $image_folder = '../uploads/' . $image_name;
-        move_uploaded_file($image_tmp, $image_folder);
-        $additional_images[] = $image_name;
-    }
-    $additional_images_json = json_encode($additional_images);
 
     // Escape strings for database insertion
     $manufacturer = mysqli_real_escape_string($conn, $manufacturer);
