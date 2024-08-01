@@ -14,23 +14,22 @@ function oblicz_sume_koszyka($koszyk, $deliveryOption) {
     foreach ($koszyk as $produkt) {
         $suma += $produkt['cena'] * $produkt['ilosc'];
     }
-    
+
     // Check if delivery option is set and add its cost
     if ($deliveryOption) {
         foreach ($_SESSION['delivery_options'] as $option) {
-            if ($option['id_dostawy'] === $deliveryOption) { // Note the comparison here
+            if ($option['id_dostawy'] === $deliveryOption) {
                 $suma += $option['cena_dostawy'];
                 break;
             }
         }
     }
-    
+
     return $suma;
 }
 
 $selectedOptionId = isset($_SESSION['delivery_option']) ? intval($_SESSION['delivery_option']) : 0;
 $suma_koszyka = oblicz_sume_koszyka($_SESSION['koszyk'], $selectedOptionId);
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     $imie = htmlspecialchars($_POST['imie']);
@@ -59,9 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
             $data_zamowienia = date('Y-m-d H:i:s'); // Current date and time
             $id_dostawy = isset($_SESSION['delivery_option']) ? intval($_SESSION['delivery_option']) : 0;
 
-            // Debugowanie
-            echo 'Wybrana opcja dostawy (ID): ' . $id_dostawy;
-
             $sql_zamowienia = "INSERT INTO zamowienia (status, id_klienta, data_zamowienia, dodatkowe_informacje, cena_calkowita, id_dostawy) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt_zamowienia = $conn->prepare($sql_zamowienia);
             $stmt_zamowienia->bind_param("sissdi", $status, $id_klienta, $data_zamowienia, $dodatkowe_informacje, $suma_koszyka, $id_dostawy);
@@ -69,12 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
             if ($stmt_zamowienia->execute()) {
                 $id_zamowienia = $stmt_zamowienia->insert_id;
 
-                // Insert order details into the lap_zamowienia table
+                // Insert order details into the lap_zamowienia table, including the total price
                 $sql_lap_zamowienia = "INSERT INTO lap_zamowienia (id_zamowienia, id_laptopa, ilosc, cena_razem) VALUES (?, ?, ?, ?)";
                 $stmt_lap_zamowienia = $conn->prepare($sql_lap_zamowienia);
 
                 foreach ($_SESSION['koszyk'] as $id_laptopa => $produkt) {
                     $ilosc = $produkt['ilosc'];
+                    // Calculate cena_razem for each product
                     $cena_razem = $produkt['cena'] * $ilosc;
 
                     $stmt_lap_zamowienia->bind_param("iiid", $id_zamowienia, $id_laptopa, $ilosc, $cena_razem);
@@ -83,7 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 
                 // Clear the cart session
                 unset($_SESSION['koszyk']);
-                header('Location: podsumowanie.php');
+
+                // Redirect to the confirmation page
+                header('Location: podziekowanie.php?id_zamowienia=' . $id_zamowienia);
                 exit();
             } else {
                 $errors[] = 'Błąd przy zapisie zamówienia do bazy.';
@@ -93,8 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
         }
     }
 }
-
-
 
 // Get the saved delivery options from the session
 $deliveryOptions = isset($_SESSION['delivery_options']) ? $_SESSION['delivery_options'] : array();
@@ -108,7 +105,6 @@ foreach ($deliveryOptions as $option) {
         break;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -218,117 +214,120 @@ foreach ($deliveryOptions as $option) {
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
             display: flex;
-            align-items: center; /* Wyrównanie elementów pionowo */
-        }
-
-        .cart-item {
-            display: flex;
             align-items: center;
-            width: 100%;
         }
 
-        .cart-item img {
-            width: 100px; /* Szerokość miniatury */
-            height: 100px; /* Wysokość miniatury */
-            object-fit: cover; /* Dopasowanie obrazu do wymiarów */
-            margin-right: 15px; /* Odstęp między miniaturą a szczegółami */
+        .summary ul li:last-child {
+            border-bottom: none;
         }
 
-        .cart-item-details {
-            display: flex;
-            flex-direction: column; /* Ustaw szczegóły w kolumnie */
+        .summary ul li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            object-fit: cover;
+            border-radius: 5px;
         }
 
-        .cart-item-details h3 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
+        .summary ul li .product-name {
+            flex-grow: 1;
         }
 
-        .cart-item-details p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .total {
+        .summary .total {
+            font-size: 18px;
             font-weight: bold;
-            margin-top: 10px;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
         }
 
+        .back-link {
+            text-decoration: none;
+            color: #555555;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            color: #333333;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                padding: 20px 20px;
+            }
+
+            .form-section, .summary-section {
+                width: 100%;
+            }
+
+            .summary {
+                margin-top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- NAGŁÓWEK -->
-    <?php include '../koszyk_zamowienie/header_k.php'; ?>
-
-    <main>
-        <div class="container">
-            <!-- Formularz -->
-            <div class="form-section">
-                <?php
-                if (!empty($errors)) {
-                    echo '<div class="errors">';
-                    foreach ($errors as $error) {
-                        echo '<p class="error">' . htmlspecialchars($error) . '</p>';
-                    }
-                    echo '</div>';
-                }
-                ?>
-
-                <form action="podanie_danych.php" method="POST">
-                    <div class="form-group">
-                        <label for="imie">Imię:</label>
-                        <input type="text" id="imie" name="imie" value="<?php echo isset($_POST['imie']) ? htmlspecialchars($_POST['imie']) : ''; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="nazwisko">Nazwisko:</label>
-                        <input type="text" id="nazwisko" name="nazwisko" value="<?php echo isset($_POST['nazwisko']) ? htmlspecialchars($_POST['nazwisko']) : ''; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Adres e-mail:</label>
-                        <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="telefon">Telefon:</label>
-                        <input type="text" id="telefon" name="telefon" value="<?php echo isset($_POST['telefon']) ? htmlspecialchars($_POST['telefon']) : ''; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="dodatkowe_informacje">Dodatkowe informacje:</label>
-                        <textarea id="dodatkowe_informacje" name="dodatkowe_informacje"><?php echo isset($_POST['dodatkowe_informacje']) ? htmlspecialchars($_POST['dodatkowe_informacje']) : ''; ?></textarea>
-                    </div>
-                    <button type="submit" name="submit" class="submit-button">Zatwierdź</button>
-                </form>
-            </div>
-
-            <!-- Podsumowanie koszyka -->
-            <div class="summary-section">
-                <div class="summary">
-                    <h2>Podsumowanie Koszyka</h2>
+    <div class="container">
+        <div class="form-section">
+            <a href="koszyk.php" class="back-link"><i class="fas fa-arrow-left"></i> Powrót do koszyka</a>
+            <h2>Podaj swoje dane</h2>
+            <?php if (!empty($errors)) : ?>
+                <div class="error">
                     <ul>
-                        <?php foreach ($_SESSION['koszyk'] as $id_laptopa => $produkt): ?>
-                            <li>
-                                <div class="cart-item">
-                                    <img src="../upolads/<?php echo htmlspecialchars($produkt['miniatura']); ?>" alt="laptop">
-                                    <div class="cart-item-details">
-                                        <h3><?php echo htmlspecialchars($produkt['nazwa']); ?></h3>
-                                        <p>Ilość: <?php echo htmlspecialchars($produkt['ilosc']); ?></p>
-                                        <p>Cena: <?php echo htmlspecialchars($produkt['cena']); ?> zł</p>
-                                    </div>
-                                </div>
-                            </li>
+                        <?php foreach ($errors as $error) : ?>
+                            <li><?php echo $error; ?></li>
                         <?php endforeach; ?>
                     </ul>
-                    <div class="total">
-                        Suma: <?php echo number_format($suma_koszyka, 2, ',', ''); ?> PLN
-                    </div>
-                    <div class="delivery-option">
-                        <h4>Wybrana opcja dostawy:</h4>
-                        <p><?php echo htmlspecialchars($delivery_option_message); ?></p>
-                    </div>
+                </div>
+            <?php endif; ?>
+            <form method="POST" action="">
+                <div class="form-group">
+                    <label for="imie">Imię:</label>
+                    <input type="text" id="imie" name="imie" value="<?php echo isset($imie) ? $imie : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="nazwisko">Nazwisko:</label>
+                    <input type="text" id="nazwisko" name="nazwisko" value="<?php echo isset($nazwisko) ? $nazwisko : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="email">Adres e-mail:</label>
+                    <input type="email" id="email" name="email" value="<?php echo isset($email) ? $email : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="telefon">Telefon:</label>
+                    <input type="text" id="telefon" name="telefon" value="<?php echo isset($telefon) ? $telefon : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="dodatkowe_informacje">Dodatkowe informacje:</label>
+                    <textarea id="dodatkowe_informacje" name="dodatkowe_informacje"><?php echo isset($dodatkowe_informacje) ? $dodatkowe_informacje : ''; ?></textarea>
+                </div>
+                <button type="submit" name="submit" class="submit-button">Złóż zamówienie</button>
+            </form>
+        </div>
+        <div class="summary-section">
+            <div class="summary">
+                <h2>Podsumowanie zamówienia</h2>
+                <ul>
+                    <?php foreach ($_SESSION['koszyk'] as $produkt) : ?>
+                        <li>
+                            <img src="<?php echo htmlspecialchars($produkt['image']); ?>" alt="<?php echo htmlspecialchars($produkt['nazwa']); ?>">
+                            <span class="product-name"><?php echo htmlspecialchars($produkt['nazwa']); ?></span>
+                            <span><?php echo $produkt['ilosc']; ?> x <?php echo $produkt['cena']; ?> zł</span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <div class="total">
+                    <span>Razem:</span>
+                    <span><?php echo number_format($suma_koszyka, 2, ',', ' '); ?> zł</span>
+                </div>
+                <div class="delivery-option">
+                    <span>Opcja dostawy:</span>
+                    <span><?php echo $delivery_option_message; ?></span>
                 </div>
             </div>
         </div>
-    </main>
-
-    <?php include '../koszyk_zamowienie/footer_k.php'; ?>
+    </div>
 </body>
 </html>
